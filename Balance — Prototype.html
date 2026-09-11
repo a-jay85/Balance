@@ -3400,7 +3400,8 @@ function skipSetup(){
   S=JSON.parse(JSON.stringify(BLANK));
   S.signedInWith='Apple'; S.added=2; S.coAdded=true; S.profile={0:'balanced',1:'balanced'};
   S.wifi='Rivera_Home';
-  S.devices[0].owner='Maya'; S.devices[1].owner='Maya'; S.devices[2].owner='Jake'; S.devices[3].owner='Family';
+  const k0=S.kids[0], k1=S.kids[1]||S.kids[0];
+  S.devices[0].owner=k0.name; S.devices[1].owner=k0.name; S.devices[2].owner=k1.name; S.devices[3].owner='Family';
   S.kids.forEach(k=>{ k.paired=true; if(needsCoppa(k)) k.coppa=true; });
   S.win=0; S.points={0:73,1:73};
   S.diet={0:'lesssocial',1:'balanced'};
