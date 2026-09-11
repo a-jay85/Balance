@@ -3036,7 +3036,7 @@ const SCREENS = {
   <div class="legal-note" style="margin-top:12px">${esc(P)} opens Today and taps Invite ${esc(c.name)}.</div>
   <div class="cta-stack">
     <button class="cta" onclick="goTo('K-02')">I scanned it</button>
-    <div class="legal-note">No code? <u onclick="toast('Ask '+${JSON.stringify(P)}+' for the six digit code')">Type the six digits instead</u></div></div>`}; },
+    <div class="legal-note">No code? <u onclick="toast('Ask '+${esc(JSON.stringify(P))}+' for the six digit code')">Type the six digits instead</u></div></div>`}; },
 
 'K-02':()=>{ const c=S.kids[S.kid], P=S.parent.first, teen=isTeen(c); return { wm:1, html:`
   <div class="hero sunrise" style="padding-top:34px;padding-bottom:30px">
