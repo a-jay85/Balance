@@ -100,8 +100,8 @@ had drifted. **The wiring is fixed. The wording below is not — that is yours.*
 1. **Where the Discover tab lives.** Left exactly where it is. The bottom-nav
    Discover tab currently targets the screen `INV-01` ("Your circle"), which is
    the family-invite screen, not a discovery surface. This was deliberately not
-   changed — where Discover belongs is a product call. See `bottomNav()` around
-   line 2017.
+   changed — where Discover belongs is a product call. See `bottomNav()` at
+   line 2124.
 
 2. **Which palette.** Nothing is chosen. Four options sit behind a switch in the
    left rail footer:
@@ -130,7 +130,7 @@ slightly stale or worth a second look.
 |---|---|
 | Prototype · 878 | Notes panel: *"Claim a quest on **Maya's** phone and Sam's…"* — names a hard-coded child that no longer exists by default. |
 | Prototype · 904 | Notes panel: *"**points vs XP.** … The marketing site says XP throughout."* — the app now says points everywhere, so this note is out of date. |
-| Prototype · 3206–3210, 3244–3248 | The abbreviation **`pts`** is still used on the child screens, while the rest of the app says **points**. Only the word XP/Loot was swapped; `pts` was left as a copy decision. |
+| Prototype · 1976–1983, 3206–3219, 3244–3268 | The abbreviation **`pts`** is still used on the child screens, while the rest of the app says **points**. Only the word XP/Loot was swapped; `pts` was left as a copy decision. |
 | Prototype · 3805 | STAGE note for `P-08` names *Sam* and *Maya* in prose. |
 | Prototype · 3822 | STAGE note for `K-02` names *Maya*. |
 | Prototype · 3823 | STAGE note for `K-DISC`. |
