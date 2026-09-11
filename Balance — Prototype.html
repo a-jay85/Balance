@@ -3450,62 +3450,66 @@ function cancelSub(){
 }
 
 /* ═══════════════ RAIL ═══════════════ */
-const RAIL = [
-  {g:'1 · Parent onboarding'},
-  {s:'P-01', id:'P-01', t:'Welcome'},
-  {s:'P-02', id:'P-02', t:'Intro video'},
-  {s:'P-03', id:'P-03', t:'Create account · SSO'},
-  {s:'P-04', id:'P-04', t:"Who's in your family"},
-  {s:'P-05', id:'P-05', t:'COPPA · verify guardian'},
-  {s:'P-06', id:'P-06', t:'Pick home network'},
-  {s:'P-06b',id:'P-06b',t:'Scanning for devices'},
-  {s:'P-07', id:'P-07', t:'Identify & tag people'},
-  {s:'P-07b',id:'P-07b',t:'Edge · nothing found'},
-  {s:'P-08', id:'P-08', t:'Pair · QR'},
-  {s:'P-10', id:'P-10', t:"You're all set"},
-  {s:'PR-01', id:'new',  t:'Goals · pick a profile'},
-  {s:'CAL-01', id:'new',  t:"The week · calendar or by hand"},
-  {s:'MIX',id:'new',  t:'The mix'},
-  {s:'RDR',id:'new',  t:'Redirect'},
-  {s:'HR-01',id:'new',  t:'House rules · when screens are off'},
-  {s:'HR-02',id:'new',  t:'Thresholds · what we watch for'},
-  {g:'2 · Everyday parent'},
-  {s:'D0-00', id:'new', t:'Day 1 · Today, before data'},
-  {s:'D0-02', id:'D0-02', t:'Day 1 dashboard'},
-  {s:'FLAG',  id:'—',     t:'Flagged'},
-  {s:'WATCH', id:'—',     t:'Watch View · the substance', arg:[0,'A']},
-  {s:'TALK',  id:'—',     t:'Talking points', arg:[0,'A']},
-  {s:'RECS', id:'new', t:'Smart Balance · Recs'},
-  {g:'3 · Maya · 14'},
-  {k:0, s:'K-01', id:'new', t:'Scan the code'},
-  {k:0, s:'K-02', id:'new', t:'Hi Maya'},
-  {k:0, s:'K-DISC',id:'new', t:'How this works'},
-  {k:0, s:'K-03', id:'new', t:'Your goals, your points'},
-  {k:0, s:'K-05', id:'new', t:'Steps and sleep'},
-  {k:0, s:'K-04', id:'new', t:'Day 1 · home'},
-  {g:'4 · Jake · 8'},
-  {k:1, s:'K-01', id:'new', t:'Scan the code'},
-  {k:1, s:'K-02', id:'new', t:'Hi Jake'},
-  {k:1, s:'K-DISC',id:'new', t:'How this works'},
-  {k:1, s:'K-03', id:'new', t:'Your goals, your points'},
-  {k:1, s:'K-05', id:'new', t:'Steps and sleep'},
-  {k:1, s:'K-04', id:'new', t:'Day 1 · home'},
-  {g:'5 · Co-parent · Alex'},
-  {s:'CP-01', id:'CP-01', t:'Receives the text'},
-  {s:'CP-02', id:'CP-02', t:'Sign in · joins family'},
-  {s:'CP-03', id:'CP-03', t:'Same dashboard'},
-  {g:'7 · Pricing'},
-  {s:'PAY-01', id:'07', t:"You're on Free · $0"},
-  {s:'PAY-02', id:'07', t:'Hitting the ceiling'},
-  {s:'PAY-03', id:'07', t:'Free vs Family · $8'},
-  {s:'PAY-04', id:'07', t:"You're on Family"},
-  {s:'PAY-05', id:'07', t:'Manage · and leaving'},
-  {g:'6 · Family circle'},
-  {s:'INV-01', id:'INV-01', t:'Your circle'},
-  {s:'INV-02', id:'INV-02', t:'Send invite · consent'},
-  {s:'INV-03', id:"INV-03", t:"Natasha's browser view"},
-  {s:'INV-04', id:'INV-04', t:'Connected'}
+/* Rail is rebuilt on every render so the child groups follow S.kids —
+   one group per child the parent actually typed on P-04. */
+const RAIL_KID = [
+  ['K-01',  'Scan the code'],
+  ['K-02',  'Hi {name}'],
+  ['K-DISC','How this works'],
+  ['K-03',  'Your goals, your points'],
+  ['K-05',  'Steps and sleep'],
+  ['K-04',  'Day 1 · home']
 ];
+function railItems(){
+  const out = [
+    {g:'1 · Parent onboarding'},
+    {s:'P-01', id:'P-01', t:'Welcome'},
+    {s:'P-02', id:'P-02', t:'Intro video'},
+    {s:'P-03', id:'P-03', t:'Create account · SSO'},
+    {s:'P-04', id:'P-04', t:"Who's in your family"},
+    {s:'P-05', id:'P-05', t:'COPPA · verify guardian'},
+    {s:'P-06', id:'P-06', t:'Pick home network'},
+    {s:'P-06b',id:'P-06b',t:'Scanning for devices'},
+    {s:'P-07', id:'P-07', t:'Identify & tag people'},
+    {s:'P-07b',id:'P-07b',t:'Edge · nothing found'},
+    {s:'P-08', id:'P-08', t:'Pair · QR'},
+    {s:'P-10', id:'P-10', t:"You're all set"},
+    {s:'PR-01', id:'new',  t:'Goals · pick a profile'},
+    {s:'CAL-01', id:'new',  t:"The week · calendar or by hand"},
+    {s:'MIX',id:'new',  t:'The mix'},
+    {s:'RDR',id:'new',  t:'Redirect'},
+    {s:'HR-01',id:'new',  t:'House rules · when screens are off'},
+    {s:'HR-02',id:'new',  t:'Thresholds · what we watch for'},
+    {g:'2 · Everyday parent'},
+    {s:'D0-00', id:'new', t:'Day 1 · Today, before data'},
+    {s:'D0-02', id:'D0-02', t:'Day 1 dashboard'},
+    {s:'FLAG',  id:'—',     t:'Flagged'},
+    {s:'WATCH', id:'—',     t:'Watch View · the substance', arg:[0,'A']},
+    {s:'TALK',  id:'—',     t:'Talking points', arg:[0,'A']},
+    {s:'RECS', id:'new', t:'Smart Balance · Recs'}
+  ];
+  let n = 3;
+  S.kids.forEach((c,i)=>{
+    out.push({g:(n++)+' · '+c.name+' · '+c.age});
+    RAIL_KID.forEach(([sc,t])=>out.push({k:i, s:sc, id:'new', t:tpl(t,c)}));
+  });
+  out.push({g:n+' · Co-parent · '+S.coparent.name},
+    {s:'CP-01', id:'CP-01', t:'Receives the text'},
+    {s:'CP-02', id:'CP-02', t:'Sign in · joins family'},
+    {s:'CP-03', id:'CP-03', t:'Same dashboard'},
+    {g:(n+2)+' · Pricing'},
+    {s:'PAY-01', id:'07', t:"You're on Free · $0"},
+    {s:'PAY-02', id:'07', t:'Hitting the ceiling'},
+    {s:'PAY-03', id:'07', t:'Free vs Family · $8'},
+    {s:'PAY-04', id:'07', t:"You're on Family"},
+    {s:'PAY-05', id:'07', t:'Manage · and leaving'},
+    {g:(n+1)+' · Family circle'},
+    {s:'INV-01', id:'INV-01', t:'Your circle'},
+    {s:'INV-02', id:'INV-02', t:'Send invite · consent'},
+    {s:'INV-03', id:"INV-03", t:"Natasha's browser view"},
+    {s:'INV-04', id:'INV-04', t:'Connected'});
+  return out;
+}
 
 function railJump(r){
   if(!r || typeof r !== 'object') return;
@@ -3602,7 +3606,7 @@ function render(){
   }
 
   // rail
-  document.getElementById('rail').innerHTML=RAIL.map(r=>{
+  document.getElementById('rail').innerHTML=railItems().map(r=>{
     if(r.g) return `<div class="rail-grp">${r.g}</div>`;
     const active = r.s===key && (r.k===undefined || r.k===S.kid);
     return `<button class="jump ${active?'on':''}" onclick='railJump(${JSON.stringify(r)})'>
