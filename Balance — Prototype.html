@@ -134,6 +134,31 @@ body[data-palette="coral"]{
 body[data-palette="coral"]{background:#F7F1E6}
 body[data-palette="coral"] .phone-content{background:#FFFDF8}
 
+/* Option 3 · navy dark — dark navy surfaces, light ink. */
+body[data-palette="navy"]{
+  --brand:#5E9FE0; --brand-d:#3F7FC4; --brand-soft:#1B2436; --brand-on-dark:#0B1120;
+  --brand-grad:linear-gradient(135deg,#5E9FE0,#8B7EC8);
+  --cream:#131A29; --cream-deep:#0B1120; --surface:#131A29; --surface2:#1B2436;
+  --line:#26314A; --line-s:#35425F; --line-s2:#35425F;
+  --ink:#E8ECF5; --ink-m:#9AA6BD; --ink-f:#6B788F;
+  --navy:#0B1120; --navy-soft:#131A29; --navy-grad:#0B1120;
+  --mint:#46D6A6; --mint-t:#8FE8C9; --mint-soft:rgba(70,214,166,.16);
+  --coral:#FF7A5C; --coral-d:#FF5A36; --coral-soft:#332020; --coral-tint:#4A2A26; --coral-peach:#FFB9A8;
+  --gold:#F2C14E; --gold-light:#FFD97A; --gold-deep:#0B1120; --gold-soft:#1B2436;
+  --sky:#4FB8E8; --sky-soft:rgba(79,184,232,.16);
+  --cobalt:#5E9FE0; --cobalt-d:#0B1120; --cobalt-soft:#1B2436;
+  --plum:#A895E8; --plum-t:#C9BCF5; --plum-soft:rgba(168,149,232,.18);
+  --alert:#FF6B6B; --alert-soft:rgba(255,107,107,.16); --alert-t:#FFAFAF;
+  --warn:#F2C14E; --warn-soft:rgba(242,193,78,.18); --warn-t:#FFE08A;
+  --leaf:#46D6A6;
+  --more:#46D6A6; --more-d:#8FE8C9; --keep:#26314A;
+  --watch:#5E9FE0; --watch-d:#9CC7F0; --less:#F2C14E; --less-d:#FFD97A;
+  --card-move:#46D6A6; --card-make:#F2C14E; --card-friends:#FF7A5C;
+  --card-learn:#5E9FE0; --card-help:#FF9F5C; --card-smart:#A895E8;
+}
+body[data-palette="navy"]{background:#080D18}
+body[data-palette="navy"] .phone-content{background:#0B1120}
+
 /* ===== Balance white system overrides ===== */
 .addrow{display:grid;gap:8px}.member-chev{color:var(--ink-f);font-size:18px}
 [class*="hero-h"],.tbtitle,.rname,.scard-v,h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-.02em}
@@ -3473,7 +3498,7 @@ function devFixture(on){
 /* Palette options. None is chosen yet — the rail-footer row lets a human
    compare them. Each entry only flips body[data-palette], which re-points the
    CSS tokens; no screen markup is involved. */
-const PALETTES=[['default','Default'],['white','Bold white'],['coral','Warm coral']];
+const PALETTES=[['default','Default'],['white','Bold white'],['coral','Warm coral'],['navy','Navy dark']];
 function setPalette(p){ S.palette=p; save(); render(); }
 function applyPalette(){
   document.body.dataset.palette = S.palette || 'default';
