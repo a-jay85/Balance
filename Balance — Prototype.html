@@ -3519,6 +3519,13 @@ function acceptCircle(){ S.sharmasIn=true; save(); goTo('INV-04'); }
 
 function skipSetup(){
   S=JSON.parse(JSON.stringify(BLANK));
+  /* Skip-ahead is demo chrome, so it loads the same fixture family as the
+     developer toggle. BLANK now seeds two empty slots, so without this every
+     screen downstream showed an unnamed, ageless child. typedKids keeps the
+     blank slots so flipping the toggle off still restores them. */
+  S.typedKids=JSON.parse(JSON.stringify(BLANK.kids));
+  S.kids=JSON.parse(JSON.stringify(DEMO_FAMILY));
+  S.demoFamily=true;
   S.signedInWith='Apple'; S.added=2; S.coAdded=true; S.profile={0:'balanced',1:'balanced'};
   S.wifi='Rivera_Home';
   const k0=S.kids[0], k1=S.kids[1]||S.kids[0];
