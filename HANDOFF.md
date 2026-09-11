@@ -2,8 +2,8 @@
 
 Written 2026-09-11. Two files were changed:
 
-- `/Users/ajaynicolas/GitHub/Balance/Balance — Prototype.html` (em dash)
-- `/Users/ajaynicolas/GitHub/Balance/Balance – Website.html` (en dash)
+- `/Users/ajaynicolas/GitHub/Balance/Prototype.html`
+- `/Users/ajaynicolas/GitHub/Balance/Website.html`
 
 `LevelUp/` and `Older Prototype/` were not touched.
 
@@ -21,7 +21,7 @@ Redirect → Nudge Logic) were **not** done — a human is doing those.
 Line numbers are from the current commit. If you edit the file the numbers move,
 so search for the literal string `[COPY]` instead.
 
-### `Balance — Prototype.html`
+### `Prototype.html`
 
 | Line | Screen | What it is |
 |---|---|---|
@@ -53,7 +53,7 @@ STAGE narration at lines **3808** (`'HR-01'`) and **3809** (`'HR-02'`). It was
 left alone on purpose — promoting narration into product copy is a writing
 decision.
 
-### `Balance – Website.html`
+### `Website.html`
 
 | Line | What it is |
 |---|---|
@@ -116,7 +116,7 @@ had drifted. **The wiring is fixed. The wording below is not — that is yours.*
    `:root` and delete the switch.
 
    The website CTA colour is a placeholder too: `--btnbg` is set to the existing
-   `--coral` token in `:root` in `Balance – Website.html`. Change it there once a
+   `--coral` token in `:root` in `Website.html`. Change it there once a
    palette is picked.
 
 ---
@@ -179,7 +179,7 @@ to be `[COPY]` too, they are all in one place: search for `pal-row` and
 The prototype reads a hash on load, so the website can open a named screen:
 
 ```
-Balance%20%E2%80%94%20Prototype.html#P-03
+Prototype.html#P-03
 ```
 
 opens *Create account · SSO*. Any screen ID in `SCREENS` works. An unknown hash
