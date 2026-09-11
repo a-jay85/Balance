@@ -575,7 +575,11 @@ input{font-family:inherit}
 .seeall{font-size:11px;color:var(--brand-d);font-weight:600}
 .seeall:hover{text-decoration:underline}
 .win-row{display:flex;gap:11px;align-items:flex-start;background:rgba(143,190,124,.13);
-  border:1px solid rgba(143,190,124,.32);border-radius:12px;padding:11px 12px;margin-bottom:8px}
+  border:1px solid rgba(143,190,124,.32);border-radius:12px;padding:11px 12px;margin-bottom:8px;
+  width:100%;text-align:left;font:inherit;color:inherit}
+button.win-row{cursor:pointer;transition:.16s}
+button.win-row:active{transform:scale(.99)}
+.win-chev{margin-left:auto;align-self:center;color:var(--ink-f);font-size:14px;flex:0 0 auto}
 .win-ico{font-size:17px;flex:0 0 auto}
 .win-t{font-size:12.5px;font-weight:600;line-height:1.4}
 .win-s{font-size:11px;color:var(--ink-m);margin-top:3px}
@@ -2743,7 +2747,7 @@ const SCREENS = {
     <span class="attn-section-h" style="margin:0">Wins ${wk?'this week':'today'}</span>
     <button class="seeall" onclick="toast('Full history after the first week')">All wins ›</button>
   </div>
-  ${winRows(i).slice(0,3).map(w=>`<div class="win-row"><span class="win-ico">${w.ico}</span><div><div class="win-t">${w.t}</div><div class="win-s">${w.s}</div></div></div>`).join('')}
+  ${winRows(i).slice(0,3).map((w,n)=>`<button class="win-row" onclick="goTo('WIN-D',[${i},${n}])"><span class="win-ico">${w.ico}</span><div><div class="win-t">${w.t}</div><div class="win-s">${w.s}</div></div><span class="win-chev">›</span></button>`).join('')}
 
   <div class="attn-head mt20">
     <span class="attn-section-h" style="margin:0">Needs attention</span>
@@ -2759,6 +2763,24 @@ const SCREENS = {
   ${bottomNav('Home')}`};
 },
 
+
+/* ─────── WIN DETAIL ─────── */
+/* Opened from a Wins row on D0-02. Everything shown is the row itself — icon,
+   title, subline — taken straight from winRows(). No new wording: the page
+   body and its labels are [COPY] slots for a human. */
+'WIN-D':()=>{
+  const a=S.arg||[], i=(a[0]==null?homeKid():a[0]), n=(a[1]||0);
+  const c=S.kids[i]||S.kids[0], w=winRows(i)[n];
+  return { back:'D0-02', html:`
+  <div class="parent-topbar">
+    <div><div class="greet">${esc(c.name)} · ${c.age}</div><div class="tbtitle">[COPY]</div></div>
+    <button class="profile-icon" onclick="goTo('D0-02')">←</button></div>
+  ${w?`<div class="win-row"><span class="win-ico">${w.ico}</span>
+    <div><div class="win-t">${w.t}</div><div class="win-s">${w.s}</div></div></div>`:''}
+  <div class="info-label mt20">[COPY]</div>
+  <p class="prose mt8">[COPY]</p>
+  <div class="cta-stack"><button class="cta" onclick="goTo('D0-02')">[COPY]</button></div>`};
+},
 
 'RECS':()=>{
   const i=homeKid(), c=S.kids[i];
