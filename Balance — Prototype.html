@@ -4014,13 +4014,14 @@ const I={
  users:'M16 20v-1.8a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20M9 10.2a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-1.8a4 4 0 0 0-3-3.9M16 2.6a4 4 0 0 1 0 7.8'};
 const ico=(k,w)=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||1.75)+'" stroke-linecap="round" stroke-linejoin="round"><path d="'+I[k]+'"/></svg>';
 
-const KIDS=[{n:'Maya',a:14,c:'#E85A3C'},{n:'Jake',a:8,c:'#5EC4A7'}];
+const KIDCOL=['#E85A3C','#5EC4A7','#8B7EC8','#3b82f6','#f5b400'];
+const kids=()=>S.kids.map((k,i)=>({n:k.name,a:k.age,c:KIDCOL[i%KIDCOL.length]}));
 const ATT=[
  {s:'high',sev:'High',cat:'Content',i:'alert',
-  t:'Maya watched 3 videos flagged for mature themes',
+  t:'{name} watched 3 videos flagged for mature themes',
   m:'YouTube · 11:40pm last night · 22 min total'},
  {s:'high',sev:'High',cat:'Contact',i:'person',
-  t:'A new contact messaged Maya 14 times this morning',
+  t:'A new contact messaged {name} 14 times this morning',
   m:'Instagram DMs · 7:02–8:45am · no mutual followers'},
  {s:'med', sev:'Medium',cat:'Pattern',i:'trend',
   t:'Short-form is up 40% this week',
@@ -4030,8 +4031,8 @@ const ATT=[
   m:'Requested 2h ago · balance 340 points'}
 ];
 const WINS=[
- {i:'ball',t:'Maya swapped screens for soccer',m:'Accepted a redirect at 4:30pm · <b>saved 40 min</b>'},
- {i:'book',t:'Jake read for 25 minutes after school',m:'5 min past his daily goal · <b>+20 points</b>'},
+ {i:'ball',t:'{name} swapped screens for soccer',m:'Accepted a redirect at 4:30pm · <b>saved 40 min</b>'},
+ {i:'book',t:'{name} read for 25 minutes after school',m:'5 min past {their} daily goal · <b>+20 points</b>'},
  {i:'cap', t:'Khan Academy over YouTube',m:'Shifted 15 min to learning this afternoon'}
 ];
 const RULES=[
@@ -4055,20 +4056,22 @@ let kid=0, range='daily';
 
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
   clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('on'),1600);}
-function setKid(i){kid=i;render();}
+function setKid(i){kid=Math.max(0,Math.min(i,S.kids.length-1));render();}
 function setRange(r){range=r;render();}
 
 function render(){
   const daily=range==='daily';
+  const K=kids(); if(kid>=K.length) kid=0;
+  const c=kidAt(kid);
   document.getElementById('home-top').innerHTML=`
     <div class="greet">
       <div><div class="greet-k">${daily?'Sun, 24 August':'Week of 18 August'}</div>
-        <div class="greet-t">Good morning, Sam.</div></div>
+        <div class="greet-t">Good morning, ${esc(S.parent.first)}.</div></div>
       <button class="bell" onclick="home_toast('4 things need you')">${ico('bell')}<b>4</b></button>
     </div>
     <div class="kidrow">
-      ${KIDS.map((k,i)=>`<button class="kid ${i===kid?'on':''}" onclick="home_setKid(${i})">
-        <i style="background:${k.c}">${k.n[0]}</i><span>${k.n}</span> <em>${k.a}</em></button>`).join('')}
+      ${K.map((k,i)=>`<button class="kid ${i===kid?'on':''}" onclick="home_setKid(${i})">
+        <i style="background:${k.c}">${esc(k.n[0])}</i><span>${esc(k.n)}</span> <em>${k.a}</em></button>`).join('')}
       <span class="seg">
         <button class="${daily?'on':''}" onclick="home_setRange('daily')">Daily</button>
         <button class="${daily?'':'on'}" onclick="home_setRange('weekly')">Weekly</button>
@@ -4101,11 +4104,11 @@ function render(){
       <span class="at-i">${ico(a.i)}</span>
       <span class="at-b">
         <span class="at-h"><span class="at-sev">${a.sev}</span><span class="at-cat">${a.cat}</span></span>
-        <span class="at-t">${a.t}</span><span class="at-m">${a.m}</span></span></button>`).join('')}
+        <span class="at-t">${tpl(a.t,c)}</span><span class="at-m">${tpl(a.m,c)}</span></span></button>`).join('')}
 
     <div class="sh"><span class="sh-t">Wins today</span><span class="sh-s">3 worth noticing</span></div>
     ${WINS.map(w=>`<div class="win"><span class="win-i">${ico(w.i)}</span>
-      <span class="win-b"><span class="win-t">${w.t}</span><span class="win-m">${w.m}</span></span></div>`).join('')}
+      <span class="win-b"><span class="win-t">${tpl(w.t,c)}</span><span class="win-m">${tpl(w.m,c)}</span></span></div>`).join('')}
 
     <div class="sh"><span class="sh-t">Where the time went</span><span class="sh-s">${daily?'Today':'This week'}</span></div>
     <div class="split">
