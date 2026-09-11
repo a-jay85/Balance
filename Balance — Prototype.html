@@ -3730,7 +3730,7 @@ function render(){
   document.getElementById('rail').innerHTML=railItems().map(r=>{
     if(r.g) return `<div class="rail-grp">${r.g}</div>`;
     const active = r.s===key && (r.k===undefined || r.k===S.kid);
-    return `<button class="jump ${active?'on':''}" onclick='railJump(${JSON.stringify(r)})'>
+    return `<button class="jump ${active?'on':''}" onclick='railJump(${esc(JSON.stringify(r))})'>
       <span class="jump-n">${r.id}</span><span>${r.t}</span></button>`;
   }).join('');
 
