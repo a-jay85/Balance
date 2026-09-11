@@ -3832,7 +3832,7 @@ const LEV={more:'Earns more', keep:'As is', watch:'Watched', less:'Eased off'};
 const PROFILES=[
  {k:'allround', t:'A bit of everything', rec:1, short:'Dips into most things',
   who:'Dips into most things, lives in none of them.',
-  w:'At 14 the flags come from creators and commentary, so we watch that closely and leave the rest counted.',
+  w:'At {age} the flags come from creators and commentary, so we watch that closely and leave the rest counted.',
   d:['keep','less','keep','keep','keep','more','watch']},
  {k:'deep', t:'Head down in one thing', short:'Goes deep on one subject',
   who:'Goes deep. Long videos, tutorials, one subject at a time.',
@@ -3844,6 +3844,7 @@ const PROFILES=[
   d:['less','less','keep','keep','keep','more','less']}
 ];
 let pick='allround';
+const kid=()=>kidAt(S.goalKid);
 const P=k=>PROFILES.find(p=>p.k===k);
 const count=(p,l)=>p.d.filter(x=>x===l).length;
 
@@ -3859,15 +3860,16 @@ const diff=p=>{
 
 function render(){
   const cur=P(pick), others=PROFILES.filter(p=>p.k!==pick), rec=PROFILES.find(p=>p.rec);
+  const c=kid();
   document.getElementById('mix-body').innerHTML=`
   <div class="lg">
-    <div class="lg-k">The mix · Maya, 14</div>
+    <div class="lg-k">The mix · ${esc(c.name)}, ${c.age}</div>
     <div class="lg-t">More and less of.</div>
   </div>
 
   <div class="stack">
   <div class="hero">
-    <span class="rib">${cur.rec?'Balance recommended · age 14':'Chosen by you'}</span>
+    <span class="rib">${cur.rec?'Balance recommended · age '+c.age:'Chosen by you'}</span>
     <div class="hero-t">${cur.t}</div>
     <div class="hero-sub">${cur.who}</div>
 
@@ -3879,10 +3881,10 @@ function render(){
           <span class="cat-l ${l}"><i></i>${LEV[l]}</span></div>`;}).join('')}
     </div>
 
-    <div class="hero-w">${cur.w}</div>
+    <div class="hero-w">${tpl(cur.w,c)}</div>
   </div>
 
-  <div class="orlbl">Sounds more like her?</div>
+  <div class="orlbl">${tpl('Sounds more like {them}?',c)}</div>
   <div class="pair">${others.map(p=>`
     <button class="card" onclick="mix_choose('${p.k}')">
       <div class="card-t">${p.t}</div>
@@ -3892,13 +3894,14 @@ function render(){
   </div>
 
   <div class="foot">
-    <p class="guard">This changes what earns points — not what she can open.</p>
-    <button class="cta" onclick="mix_toast('Saved for Maya')">${cur.rec?'That sounds like Maya':'Use this for Maya'}</button>
+    <p class="guard">${tpl('This changes what earns points — not what {they} can open.',c)}</p>
+    <button class="cta" onclick="mix_save()">${cur.rec?'That sounds like '+esc(c.name):'Use this for '+esc(c.name)}</button>
     <button class="cta-2" onclick="mix_toast('Opens the full breakdown')">What each level does</button>
   </div>`;
 }
 
 window.mix_choose=choose;
+window.mix_save=()=>toast('Saved for '+kid().name);
 window.mix_render=render;
 window.mix_toast=toast;
 })();
