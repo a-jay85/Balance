@@ -1766,6 +1766,13 @@ function tpl(str,c){
     .replace(/\{is\}/g,p.pl?'are':'is')
     .replace(/\{s:([a-z]+)\}/g,(m,v)=>p.pl?v:v+'s');
 }
+/* "A", "A & B", "A, B & C" — names only, no new words */
+function nameList(arr){
+  const n=(arr||[]).map(k=>esc(k.name)).filter(Boolean);
+  if(!n.length) return '';
+  if(n.length===1) return n[0];
+  return n.slice(0,-1).join(', ')+' &amp; '+n[n.length-1];
+}
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 /* every screen that names a specific child goes through these */
 function kidAt(i){ return S.kids[Math.min(i, S.kids.length-1)] || S.kids[0]; }
@@ -3919,12 +3926,12 @@ const SIDE={
    h:'We offer something in the physical world to do.',
    l:['It earns points. Nothing is taken away.',
       'Only the kinds of activities you and your child pick.'],
-   eg:'Jake watches football clips most evenings. We suggest <b>the drills outside instead — 25 minutes, double points.</b>'},
+   eg:'{name} watches football clips most evenings. We suggest <b>the drills outside instead — 25 minutes, double points.</b>'},
  on: {t:'Better online', s:'Productive screen time', k:'What better online means',
    h:'We steer what they watch toward what you want.',
    l:['Better content earns more — the healthier choice is the rewarding one.',
       'Built around where you want them guided, not what the feed serves next.'],
-   eg:'Jake watches football clips most evenings. We put <b>short math quizzes in the same slot — built for his age, and worth more than the clips.</b>'}
+   eg:'{name} watches football clips most evenings. We put <b>short math quizzes in the same slot — built for {their} age, and worth more than the clips.</b>'}
 };
 const CATS=[
  {k:'body',   t:'Body',   s:'Sport, biking, swimming, dance'},
@@ -3955,7 +3962,7 @@ function render(){
       <div class="det-k">${d.k}</div>
       <div class="det-t">${d.h}</div>
       ${d.l.map(x=>`<div class="det-l"><i>—</i><span>${x}</span></div>`).join('')}
-      <div class="eg"><div class="eg-k">For instance</div><div class="eg-t">${d.eg}</div></div>
+      <div class="eg"><div class="eg-k">For instance</div><div class="eg-t">${tpl(d.eg,youngest())}</div></div>
     </div>`;
   else mid=`
     <div class="grp">${CATS.map(c=>`<div class="c">
@@ -3967,7 +3974,7 @@ function render(){
 
   document.getElementById('redirect-body').innerHTML=`
   <div class="hd">
-    <div class="hd-k">Maya &amp; Jake</div>
+    <div class="hd-k">${nameList(S.kids)}</div>
     <div class="hd-t">Redirect.</div>
     <div class="hd-s">Two ways to point their online time somewhere better.</div>
   </div>
