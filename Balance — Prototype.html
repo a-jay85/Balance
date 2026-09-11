@@ -2923,6 +2923,60 @@ const SCREENS = {
 
 
 
+/* ─────── 1c · HOUSE RULES · GATE 1 — when screens are off ─────── */
+/* Rebuilt from the ZONES data, the zoneSheet editor and the .lg/.day/.bseg
+   CSS block, all of which were already in the file. No new wording: every
+   string here comes from ZONES. Hero and CTA words are [COPY]. */
+'HR-01':()=>{
+  const i=S.goalKid, c=S.kids[i];
+  const dur=(a,b)=>((tnum(b)-tnum(a)+24)%24)*60;
+  const back=(t,m)=>hnum((tnum(t)-m/60+24)%24);
+  const seg=(cls,from,mins)=>mins<=0?'':`<i class="bseg ${cls}" style="left:${tlp(from)}%;width:${mins/1440*100}%"></i>`;
+  const sl=zget(i,'sleep'), wd=zget(i,'wind'), ml=zget(i,'meal'), st=zget(i,'study');
+  const band =
+    (sl.on?seg('sleep', sl.from, dur(sl.from, sl.to)):'') +
+    (wd.on&&sl.on?seg('wind', back(sl.from, wd.mins), wd.mins):'') +
+    (ml.on?seg('meal', ml.from, ml.mins):'') +
+    (st.on?seg('study', st.from, dur(st.from, st.to)):'');
+  const row=z=>{
+    const g=zget(i,z.k);
+    return `<button class="grow ${g.on?'':'dim'}" onclick="openZone('${z.k}')">
+      <span class="gi ${z.mech==='stop'?'nav':'acc'}">${ico(z.e)}</span>
+      <span class="gb"><span class="gt">${z.t}</span><span class="gs">${z.s(i)}</span></span>
+      <span class="gv">${g.on?z.v(i):''}</span><span class="chev">›</span></button>`;
+  };
+  const group=g=>`<div class="grp">${ZONES.filter(z=>z.grp===g).map(row).join('')}</div>`;
+  return { wm:1, html:`
+  <div class="lg">
+    <div class="lg-k">[COPY] · ${esc(c.name)}, ${c.age}</div>
+    <div class="lg-t">[COPY]</div>
+    <div class="lg-s">[COPY]</div>
+  </div>
+
+  <div class="day">
+    <div class="day-k">[COPY]</div>
+    <div class="day-t">[COPY]</div>
+    <div class="bar">${band}</div>
+    <div class="bax"><span>${t12('06:00')}</span><span>${t12('12:00')}</span><span>${t12('18:00')}</span><span>${t12('00:00')}</span></div>
+    <div class="bkey">
+      <span><i style="background:#7E8FBD"></i>${ZONES[0].t}</span>
+      <span><i style="background:rgba(169,156,200,.85)"></i>${ZONES[2].t}</span>
+      <span><i style="background:var(--gold)"></i>${ZONES[1].t}</span>
+      <span><i style="background:var(--cobalt)"></i>${ZONES[3].t}</span>
+    </div>
+  </div>
+
+  <div class="seclbl">[COPY]</div>
+  ${group('stop')}
+  <div class="seclbl tight">[COPY]</div>
+  ${group('soft')}
+
+  <div class="cta-stack"><button class="cta" onclick="goTo('HR-02')">[COPY]</button></div>
+  ${zoneIsRec(i,'sleep')&&zoneIsRec(i,'wind')&&zoneIsRec(i,'meal')&&zoneIsRec(i,'study')&&zoneIsRec(i,'off')
+    ?'':`<button class="cta-2" onclick="resetHR()">Use the recommendation for ${c.age}</button>`}
+  ${zoneSheet()}`};
+},
+
 /* ─────── SETTLED SCREENS · house rules · the mix · redirect ─────── */
 'HR':()=>({ wm:0, flush:1, html:`<div id="s-rules" class="mod-wrap"><div id="rules-body"></div></div>` }),
 'MIX':()=>({ wm:0, flush:1, html:`<div id="s-mix" class="mod-wrap"><div id="mix-body"></div></div>` }),
