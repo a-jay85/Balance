@@ -1515,9 +1515,12 @@ const BLANK = {
   familyName:'Your family', added:0, coAdded:false,
   parent:{first:'Sam', last:'Rivera', initials:'SR'},
   coparent:{name:'Alex', initials:'AR', joined:false, invited:true},
+  /* Two empty slots. Names and dates of birth come from what the parent
+     types on P-04. The Maya/Jake fixture lives behind the developer
+     toggle in the rail footer (DEMO_FAMILY). */
   kids:[
-    {name:'Maya', dob:'2012-03-14', age:14, av:'maya', letter:'M', devices:[], paired:false, oauth:true},
-    {name:'Jake', dob:'2018-06-02', age:8,  av:'leo',  letter:'J', devices:[],               paired:false, coppa:false, oauth:true}
+    {name:'New child', dob:null, age:null, av:'maya', letter:'N', devices:[], paired:false, oauth:true},
+    {name:'New child', dob:null, age:null, av:'leo',  letter:'N', devices:[], paired:false, oauth:true}
   ],
   wifi:null, assigning:null, person:null,
   devices:[
