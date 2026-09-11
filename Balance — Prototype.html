@@ -108,6 +108,32 @@ body[data-palette="white"]{
 body[data-palette="white"]{background:#F2F2F7}
 body[data-palette="white"] .phone-content{background:#F2F2F7}
 
+/* Option 2 · warm coral — coral / navy / cream from the LevelUp handoff,
+   with mint #5EC4A7 and plum #8B7EC8. */
+body[data-palette="coral"]{
+  --brand:#FF5A36; --brand-d:#D9472A; --brand-soft:#FDEDE9; --brand-on-dark:#FFFDF8;
+  --brand-grad:linear-gradient(135deg,#FF5A36,#FF8A5C);
+  --cream:#FFFDF8; --cream-deep:#F7F1E6; --surface:#FFFDF8; --surface2:#F2E9DA;
+  --line:#E7DCC9; --line-s:#D8C9B0; --line-s2:#D8C9B0;
+  --ink:#1B2A41; --ink-m:#5C6B80; --ink-f:#97A2B2;
+  --navy:#1B2A41; --navy-soft:#27384F; --navy-grad:#1B2A41;
+  --mint:#5EC4A7; --mint-t:#2E7C66; --mint-soft:rgba(94,196,167,.16);
+  --coral:#FF5A36; --coral-d:#D9472A; --coral-soft:#FDEDE9; --coral-tint:#FBDDD4; --coral-peach:#FFB9A8;
+  --gold:#E8A33D; --gold-light:#F6C978; --gold-deep:#1B2A41; --gold-soft:#F7F1E6;
+  --sky:#5E9FC4; --sky-soft:rgba(94,159,196,.14);
+  --cobalt:#3A6EA5; --cobalt-d:#1B2A41; --cobalt-soft:#F7F1E6;
+  --plum:#8B7EC8; --plum-t:#4E4379; --plum-soft:rgba(139,126,200,.16);
+  --alert:#D9472A; --alert-soft:rgba(217,71,42,.13); --alert-t:#8A2E2E;
+  --warn:#E8A33D; --warn-soft:rgba(232,163,61,.18); --warn-t:#7A5100;
+  --leaf:#5EC4A7;
+  --more:#5EC4A7; --more-d:#2E7C66; --keep:#E7DCC9;
+  --watch:#3A6EA5; --watch-d:#27507A; --less:#E8A33D; --less-d:#A06B1F;
+  --card-move:#5EC4A7; --card-make:#E8A33D; --card-friends:#FF5A36;
+  --card-learn:#3A6EA5; --card-help:#F2814F; --card-smart:#8B7EC8;
+}
+body[data-palette="coral"]{background:#F7F1E6}
+body[data-palette="coral"] .phone-content{background:#FFFDF8}
+
 /* ===== Balance white system overrides ===== */
 .addrow{display:grid;gap:8px}.member-chev{color:var(--ink-f);font-size:18px}
 [class*="hero-h"],.tbtitle,.rname,.scard-v,h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-.02em}
@@ -3447,7 +3473,7 @@ function devFixture(on){
 /* Palette options. None is chosen yet — the rail-footer row lets a human
    compare them. Each entry only flips body[data-palette], which re-points the
    CSS tokens; no screen markup is involved. */
-const PALETTES=[['default','Default'],['white','Bold white']];
+const PALETTES=[['default','Default'],['white','Bold white'],['coral','Warm coral']];
 function setPalette(p){ S.palette=p; save(); render(); }
 function applyPalette(){
   document.body.dataset.palette = S.palette || 'default';
