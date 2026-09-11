@@ -2705,10 +2705,11 @@ const SCREENS = {
     {k:'Off screen',ring:rOne(88,'#22C55E'),v:'88',l:'Soccer 1h · Walk 30m · Reading 45m',go:'RECS'},
     {k:'Connections',ring:rSeg([[.45,'#34a862'],[.36,'#3b82f6'],[.18,'#8b5cf6']]),v:'<small>5h 30</small>',l:'Friends 2h 30m · Family 2h · Community 1h. This week.',go:'RECS'}];
   const ring=(v,col)=>{const C=2*Math.PI*26;const off=v==null?0:Math.round(C*(1-v/100));return `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="none" stroke="#e9e9ee" stroke-width="6"/><circle cx="30" cy="30" r="26" fill="none" stroke="${col||'#1d1d1f'}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off}" transform="rotate(-90 30 30)"/></svg>`;};
-  const flags=[
-    {sev:'Med',t:'A dare that’s going around',s:'Two videos of the same challenge. Kids in them, not adults.'},
-    {sev:'Med',t:'What-I-eat-in-a-day',s:'Three body and beauty videos this week. '+esc(c.name)+' is '+c.age+'.'},
-    {sev:'Low',t:'Two hauls',s:'Unboxings that are really ads. Nobody said so.'}];
+  /* Needs attention used to be its own hard-coded copy of the three flags, so
+     it drifted from Flagged / Watch View / Talking Points and it showed flag B
+     even for a child too young for it. It now reads flagsFor() and CASES, the
+     same source the other three surfaces use. */
+  const flags=fl.map(f=>({f, d:CASES[f]}));
   return { nav:'Home', html:`
   <div class="parent-topbar">
     <div><div class="greet">Good evening, ${esc(S.parent.first)}</div><div class="tbtitle">Today</div></div>
@@ -2753,9 +2754,10 @@ const SCREENS = {
     <span class="attn-section-h" style="margin:0">Needs attention</span>
     <button class="seeall" onclick="goTo('FLAG')">See all ›</button>
   </div>
-  ${flags.slice(0,3).map((f,n)=>`<button class="attn-item tap" onclick="openFlag(${i},'${n===0?'A':n===1?'B':'C'}')">
-      <span class="risk-badge ${f.sev==='Low'?'low':'medium'}">${f.sev}</span>
-      <div class="attn-body"><div class="attn-text">${f.t}</div><div class="attn-meta">${f.s}</div></div>
+  ${flags.slice(0,3).map(x=>`<button class="attn-item tap" onclick="openFlag(${i},'${x.f}')">
+      <span class="risk-badge ${x.d.badge}">${x.d.badge==='low'?'Low':'Med'}</span>
+      <div class="attn-body"><div class="attn-text">${tpl(x.d.line,c).replace(/\.$/,'')}</div>
+        <div class="attn-meta">${tpl(x.d.sub,c)}</div></div>
       <span class="attn-chev">›</span></button>`).join('')}
 
   <div class="tpbox"><div class="tpk">Talking point</div><div class="tpt">“Which one would you actually try?” Let ${tpl('{them}',c)} answer before you do.</div></div>
