@@ -3909,6 +3909,20 @@ function tickClock(){
 tickClock(); setInterval(tickClock,10000);
 render();
 
+/* ═════ HASH DEEP LINK ═════
+   The website links straight into a screen, e.g.
+     Balance%20—%20Prototype.html#P-03
+   Runs after the first render() on purpose: load() wipes storage and seeds a
+   fresh S on every page load, so a jump made before that would be thrown away.
+   An unknown or missing hash is ignored and the app opens normally. */
+function openFromHash(){
+  const key=decodeURIComponent((location.hash||'').replace(/^#/,'')).trim();
+  if(!key || !SCREENS[key]) return;
+  railJump({s:key});
+}
+openFromHash();
+window.addEventListener('hashchange', openFromHash);
+
 /* ═══════════════ HOUSE RULES · behaviour ═══════════════ */
 function setGoalKid(n){ S.goalKid=Math.max(0,Math.min(n,S.kids.length-1)); save(); render(); }
 
