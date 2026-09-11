@@ -78,6 +78,36 @@
   --sans:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 }
 
+/* ═════ PALETTE OPTIONS ═════
+   Swapped from the rail footer. Nothing is chosen yet — these are options for
+   a human to pick from. Each one only re-points the tokens above, so no screen
+   markup changes. data-palette="default" is the palette that shipped. */
+
+/* Option 1 · bold white — Apple Health rings on white. */
+body[data-palette="white"]{
+  --brand:#000000; --brand-d:#000000; --brand-soft:#F2F2F7; --brand-on-dark:#FFFFFF;
+  --brand-grad:linear-gradient(135deg,#000000,#3A3A3C);
+  --cream:#FFFFFF; --cream-deep:#F2F2F7; --surface:#FFFFFF; --surface2:#F2F2F7;
+  --line:#E5E5EA; --line-s:#D1D1D6; --line-s2:#D1D1D6;
+  --ink:#000000; --ink-m:#636366; --ink-f:#AEAEB2;
+  --navy:#000000; --navy-soft:#1C1C1E; --navy-grad:#000000;
+  --mint:#30D158; --mint-t:#248A3D; --mint-soft:rgba(48,209,88,.14);
+  --coral:#FF375F; --coral-d:#D70015; --coral-soft:#FFE9ED; --coral-tint:#FFD3DC; --coral-peach:#FFA9B8;
+  --gold:#FFD60A; --gold-light:#FFE566; --gold-deep:#000000; --gold-soft:#F2F2F7;
+  --sky:#32ADE6; --sky-soft:rgba(50,173,230,.12);
+  --cobalt:#0A84FF; --cobalt-d:#000000; --cobalt-soft:#F2F2F7;
+  --plum:#BF5AF2; --plum-t:#6B21A8; --plum-soft:rgba(191,90,242,.14);
+  --alert:#FF453A; --alert-soft:rgba(255,69,58,.12); --alert-t:#B3261E;
+  --warn:#FF9F0A; --warn-soft:rgba(255,159,10,.16); --warn-t:#8A5200;
+  --leaf:#30D158;
+  --more:#30D158; --more-d:#248A3D; --keep:#E5E5EA;
+  --watch:#0A84FF; --watch-d:#0060DF; --less:#FF9F0A; --less-d:#8A5200;
+  --card-move:#30D158; --card-make:#FFD60A; --card-friends:#FF375F;
+  --card-learn:#0A84FF; --card-help:#FF9F0A; --card-smart:#BF5AF2;
+}
+body[data-palette="white"]{background:#F2F2F7}
+body[data-palette="white"] .phone-content{background:#F2F2F7}
+
 /* ===== Balance white system overrides ===== */
 .addrow{display:grid;gap:8px}.member-chev{color:var(--ink-f);font-size:18px}
 [class*="hero-h"],.tbtitle,.rname,.scard-v,h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-.02em}
@@ -120,6 +150,10 @@ input{font-family:inherit}
 .rbtn:hover{background:rgba(255,255,255,.09);color:#fff}
 .rbtn.warn:hover{background:var(--coral-d);border-color:var(--coral-d)}
 .rbtn.rtog{display:flex;align-items:center;gap:7px;cursor:pointer;text-align:left}
+.pal-row{display:flex;gap:4px;margin-top:6px}
+.pal-row button{flex:1;border:1px solid rgba(255,255,255,.18);background:transparent;color:rgba(255,255,255,.62);
+  border-radius:8px;padding:5px 2px;font:inherit;font-size:9.5px;font-weight:700;letter-spacing:.02em;cursor:pointer}
+.pal-row button.on{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.4)}
 .rbtn.rtog input{accent-color:var(--coral,#ff5a36);width:12px;height:12px;flex:none}
 .rail-note{font-size:9.5px;color:rgba(255,255,255,.32);margin-top:3px;line-height:1.5}
 
@@ -758,6 +792,7 @@ button.win-row:active{transform:scale(.99)}
     <button class="rbtn" onclick="skipSetup()">Skip ahead — family set up</button>
     <button class="rbtn warn" onclick="hardReset()">Reset — start over</button>
     <label class="rbtn rtog"><input type="checkbox" id="devFixture" onchange="devFixture(this.checked)"><span>Developer · demo family</span></label>
+    <div class="pal-row" id="palRow"></div>
     <div class="rail-note" id="railNote">Screens follow the v3 handoff. IDs match your files.</div>
   </div>
 </aside>
@@ -3409,6 +3444,18 @@ function devFixture(on){
   S.homeKid = 0; S.goalKid = 0; S.kid = 0;
   save(); render();
 }
+/* Palette options. None is chosen yet — the rail-footer row lets a human
+   compare them. Each entry only flips body[data-palette], which re-points the
+   CSS tokens; no screen markup is involved. */
+const PALETTES=[['default','Default'],['white','Bold white']];
+function setPalette(p){ S.palette=p; save(); render(); }
+function applyPalette(){
+  document.body.dataset.palette = S.palette || 'default';
+  const row=document.getElementById('palRow'); if(!row) return;
+  row.innerHTML = PALETTES.map(([k,l])=>
+    `<button class="${(S.palette||'default')===k?'on':''}" onclick="setPalette('${k}')">${l}</button>`).join('');
+}
+
 function addKid(){ if(S.added<2){ S.added++; S.person=S.added-1; save(); render(); } else addPerson(); }
 function addCo(){ S.coAdded=true; save(); render(); }
 function addPerson(){ S.added=Math.max(S.added,S.kids.length+1);
@@ -3788,6 +3835,7 @@ function render(){
 
   const devBox = document.getElementById('devFixture');
   if(devBox) devBox.checked = !!S.demoFamily;
+  applyPalette();
 
   document.getElementById('railSub').textContent = isChild
     ? esc(S.kids[S.kid].name)+"'s phone"
