@@ -177,13 +177,13 @@ input{font-family:inherit}
 .cta-2:hover{color:var(--brand-d)}
 .cta-soft{display:block;width:100%;background:var(--surface);border:1px solid var(--line-s);color:var(--ink);border-radius:99px;padding:13px;font-size:13px;font-weight:600;text-align:center;transition:.15s}
 .cta-soft:hover{border-color:var(--brand);color:var(--brand-d)}
-.cta-with-loot{display:flex;align-items:center;justify-content:center;gap:12px}
+.cta-with-points{display:flex;align-items:center;justify-content:center;gap:12px}
 .cta-divider{width:1px;height:18px;background:rgba(255,255,255,.25)}
-.cta-loot{display:flex;align-items:center;gap:6px}
+.cta-points{display:flex;align-items:center;gap:6px}
 .coin{width:15px;height:15px;border-radius:50%;background:var(--gold);border:1.5px solid var(--gold-deep);flex:0 0 15px}
 .coin.sm{width:11px;height:11px;border-width:1px}
 .coin.lg{width:22px;height:22px;border-width:2px}
-.cta-loot-val{font-family:var(--serif);font-size:15px}
+.cta-points-val{font-family:var(--serif);font-size:15px}
 .sso-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--surface);border:1px solid var(--line-s);border-radius:99px;padding:14px;font-size:14px;font-weight:600;margin-bottom:9px;transition:.15s}
 .sso-btn:hover{border-color:var(--navy);transform:translateY(-1px)}
 .sso-btn.dark{background:var(--navy);color:#fff;border-color:var(--navy)}
@@ -274,13 +274,13 @@ input{font-family:inherit}
   background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0}
 .empty-icon{width:80px;height:80px;border-radius:50%;background:var(--brand-soft);display:grid;place-items:center;margin:20px auto 16px;font-size:32px}
 
-/* ───────── QUESTS / LOOT ───────── */
+/* ───────── QUESTS / POINTS ───────── */
 .stash-card{background:var(--navy-grad);border-radius:18px;padding:18px;position:relative;overflow:hidden;color:#fff}
 .stash-card::before{content:'';position:absolute;width:120px;height:120px;border-radius:50%;background:var(--gold);opacity:.28;top:-45px;right:-35px;filter:blur(14px);pointer-events:none}
-.loot-eyebrow{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);font-weight:700;position:relative}
-.loot-amount{display:flex;align-items:baseline;gap:9px;margin-top:8px;position:relative}
-.loot-amount-n{font-family:var(--serif);font-size:38px;line-height:1;color:#fff}
-.loot-label{font-size:11.5px;color:rgba(255,255,255,.6);margin-top:7px;position:relative}
+.points-eyebrow{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);font-weight:700;position:relative}
+.points-amount{display:flex;align-items:baseline;gap:9px;margin-top:8px;position:relative}
+.points-amount-n{font-family:var(--serif);font-size:38px;line-height:1;color:#fff}
+.points-label{font-size:11.5px;color:rgba(255,255,255,.6);margin-top:7px;position:relative}
 .quest-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .pcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;width:100%;transition:.16s}
 .pcard:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(31,36,51,.1);border-color:var(--line-s)}
@@ -304,7 +304,7 @@ input{font-family:inherit}
 .win-card-cat{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-f);font-weight:700}
 .win-card-title{font-family:var(--serif);font-size:16px;margin-top:5px}
 .win-card-sub{font-size:11.5px;color:var(--ink-m);margin-top:4px;line-height:1.5}
-.win-card-loot{display:flex;align-items:center;gap:5px;margin-top:8px;font-size:11.5px;font-weight:700;color:var(--gold-deep)}
+.win-card-points{display:flex;align-items:center;gap:5px;margin-top:8px;font-size:11.5px;font-weight:700;color:var(--gold-deep)}
 
 /* ───────── DASHBOARD ───────── */
 .parent-topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
@@ -1528,7 +1528,7 @@ const BLANK = {
   goalKid:0, diet:{}, zones:{}, thresh:{}, hrDone:{}, zoneEdit:null, thOpen:null,
   plan:'free', subscribed:false, upsell:null,
   homeKid:0, homeRange:'daily',
-  loot:{0:50, 1:50},          // per child — day 0 starts at 50
+  points:{0:50, 1:50},          // per child — day 0 starts at 50
   claimed:{0:[], 1:[]},
   interests:{0:[], 1:[]},
   kidStep:{0:'M-01', 1:'L-01'},
@@ -1560,7 +1560,7 @@ function hydrate(saved){
   });
 
   // every per-child map gets one entry per child
-  const maps = {loot:50, claimed:[], interests:[], kidStep:'K-01', diet:null, seenDisclosure:false, zones:null, thresh:null, hrDone:false};
+  const maps = {points:50, claimed:[], interests:[], kidStep:'K-01', diet:null, seenDisclosure:false, zones:null, thresh:null, hrDone:false};
   Object.keys(maps).forEach(key=>{
     if(!s[key] || typeof s[key] !== 'object' || Array.isArray(s[key])) s[key] = {};
     s.kids.forEach((k,i)=>{
@@ -1775,7 +1775,7 @@ function needsCoppa(c){ return c.age < 13; }
 /* deterministic pseudo-values so numbers are stable across reloads */
 function hash(s){ let h=2166136261; for(let i=0;i<String(s).length;i++){ h^=String(s).charCodeAt(i); h=Math.imul(h,16777619); } return Math.abs(h); }
 
-function totalLoot(){ return S.kids.reduce((a,c,i)=>a+(S.loot[i]||0),0); }
+function totalPoints(){ return S.kids.reduce((a,c,i)=>a+(S.points[i]||0),0); }
 
 /* ── the three scores · computed, never drawn ────────────────────
    Online  falls with content flags. Off-screen rises with claimed
@@ -2485,7 +2485,7 @@ const SCREENS = {
   </div>
   <div class="gold-card mt14">
     <span class="coin lg"></span>
-    <div><div class="gold-card-t">${totalLoot()} points in the family</div>
+    <div><div class="gold-card-t">${totalPoints()} points in the family</div>
       <div class="gold-card-s">Earned, never bought.</div></div></div>
   <div class="cta-stack">
     <button class="cta" onclick="goTo('D0-02')">Back to Today</button>
@@ -2534,12 +2534,12 @@ const SCREENS = {
       <div><div class="win-card-cat">${w.cat}</div>
         <div class="win-card-title">${w.t}</div>
         <div class="win-card-sub">${w.s}</div>
-        <div class="win-card-loot">${coin('sm')} +${w.v} points for kids</div></div></button>`).join('')}
+        <div class="win-card-points">${coin('sm')} +${w.v} points for kids</div></div></button>`).join('')}
   </div>
   <div class="cta-stack">
     <button class="cta ${S.win===null?'off':''}" onclick="commitWin()">
-      <span class="cta-with-loot"><span>${S.win===null?'Pick one':'Commit to '+WINS[S.win].t.split(' ')[0].toLowerCase()+' tonight'}</span>
-      <span class="cta-divider"></span><span class="cta-loot">${coin()}<span class="cta-loot-val">+${S.win===null?0:WINS[S.win].v}</span></span></span></button>
+      <span class="cta-with-points"><span>${S.win===null?'Pick one':'Commit to '+WINS[S.win].t.split(' ')[0].toLowerCase()+' tonight'}</span>
+      <span class="cta-divider"></span><span class="cta-points">${coin()}<span class="cta-points-val">+${S.win===null?0:WINS[S.win].v}</span></span></span></button>
     <button class="cta-2" onclick="goTo('D0-02')">Skip today</button></div>`}),
 
 /* ── PARENT HOME · the deck's slide-01 dashboard, in our theme ── */
@@ -2715,7 +2715,7 @@ const SCREENS = {
   <div class="win-row"><span class="win-ico">🔬</span><div><div class="win-t">Thirty minutes of a science channel and Duolingo</div><div class="win-s"><b>+10 pts earned.</b></div></div></div>
   <div class="win-row"><span class="win-ico">🍽️</span><div><div class="win-t">Dinner with the family, no phones</div><div class="win-s">Everyone earned points.</div></div></div>
   <div class="win-row"><span class="win-ico">🌙</span><div><div class="win-t">Phone in the kitchen by nine. Nine hours of sleep.</div><div class="win-s">Reported by ${esc(c.name)}. <b>+5 pts.</b></div></div></div>
-  ${claims?`<div class="win-row"><span class="win-ico">✨</span><div><div class="win-t">${claims} quest${claims===1?'':'s'} claimed ${wk?'this week':'today'}</div><div class="win-s">Now <b>${S.loot[i]} pts</b> in ${tpl('{their}',c)} stash.</div></div></div>`:''}
+  ${claims?`<div class="win-row"><span class="win-ico">✨</span><div><div class="win-t">${claims} quest${claims===1?'':'s'} claimed ${wk?'this week':'today'}</div><div class="win-s">Now <b>${S.points[i]} pts</b> in ${tpl('{their}',c)} stash.</div></div></div>`:''}
 
   <div class="attn-head mt20">
     <span class="attn-section-h" style="margin:0">Needs attention</span>
@@ -2774,7 +2774,7 @@ const SCREENS = {
     <div class="hero-eyebrow">Week 1 complete</div>
     <div class="hero-h" style="font-size:26px">Time to set<br>the Quest plan.</div>
   </div>
-  <div class="body-copy">Your family stacked <strong>${totalLoot()} points</strong> together this week. Now let's set the bar for the long game.</div>
+  <div class="body-copy">Your family stacked <strong>${totalPoints()} points</strong> together this week. Now let's set the bar for the long game.</div>
   <div class="mt16">
     <div class="info-card"><div class="info-label">What's next</div>
       <div class="info-h">Set quest goals across 6 categories</div>
@@ -2900,7 +2900,7 @@ const SCREENS = {
     <div style="display:flex;align-items:center;gap:10px">
       <div class="avatar ${c.av}" style="width:30px;height:30px;flex:0 0 30px;font-size:14px">${c.letter}</div>
       <div style="flex:1"><b style="font-size:13px">${esc(c.name)}, ${c.age}</b>
-        <div style="font-size:10.5px;color:var(--ink-f);margin-top:2px">${c.paired?'Paired':'Not paired'} · ${S.loot[i]} points · ${c.oauth?'Google connected':'no content path'}</div></div>
+        <div style="font-size:10.5px;color:var(--ink-f);margin-top:2px">${c.paired?'Paired':'Not paired'} · ${S.points[i]} points · ${c.oauth?'Google connected':'no content path'}</div></div>
     </div>
     <button class="cta-soft mt10" onclick="openChild(${i})">Open ${esc(c.name)}'s phone →</button></div>`).join('')}
   <div class="info-label mt16">Prototype</div>
@@ -3016,8 +3016,8 @@ const SCREENS = {
   <div class="rangebar"><div class="seg2"><button class="on">Daily</button><button onclick="toast('After the first week')">Weekly</button></div><div class="rangedate">Day 1</div></div>
   <div class="gold-card" style="margin:6px 18px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
     <div><span class="gold-card-k">Your points</span>
-      <div class="gold-card-t">${S.loot[i]}</div>
-      <div class="gold-card-s" style="font-size:13px">${S.loot[i]===50?'+50 to start. ':''}Movie night at 1,000.</div></div>
+      <div class="gold-card-t">${S.points[i]}</div>
+      <div class="gold-card-s" style="font-size:13px">${S.points[i]===50?'+50 to start. ':''}Movie night at 1,000.</div></div>
     <div style="position:relative;flex:none;text-align:right;font-size:11px;color:rgba(255,255,255,.72);line-height:1.6;white-space:nowrap">Hit a goal <b style="color:#ff5a36">+10</b><br>Log a thing <b style="color:#ff5a36">+5</b><br>3 days straight <b style="color:#ff5a36">×2</b></div>
   </div>
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin:18px 18px 0">
@@ -3241,7 +3241,7 @@ function addCo(){ S.coAdded=true; save(); render(); }
 function addPerson(){ S.added=Math.max(S.added,S.kids.length+1);
   const n=S.kids.length;
   S.kids.push({name:'New child', dob:null, age:null, av:AVCOLORS[n%AVCOLORS.length], letter:'N', devices:[], paired:false, oauth:true});
-  S.loot[n]=50; S.claimed[n]=[]; S.kidStep[n]='K-01';
+  S.points[n]=50; S.claimed[n]=[]; S.kidStep[n]='K-01';
   S.person=n; save(); render();
 }
 function removePerson(i){
@@ -3368,7 +3368,7 @@ function pickWin(i){ S.win=i; save(); render(); }
 function commitWin(){
   if(S.win===null) return;
   const v=WINS[S.win].v;
-  S.loot[0]+=Math.round(v/2); S.loot[1]+=Math.round(v/2);
+  S.points[0]+=Math.round(v/2); S.points[1]+=Math.round(v/2);
   save(); goTo('D0-02'); toast('+'+v+' points split between the kids');
 }
 function setPlan(){ S.questPlan=true; save(); render(); toast('Quest plan set'); }
@@ -3382,9 +3382,9 @@ function claimQuest(qi){
   const q=QUESTS[qi], i=S.kid;
   if(!S.claimed[i]) S.claimed[i]=[];
   if(S.claimed[i].includes(q.k)){ toast('Already claimed today'); return; }
-  S.claimed[i].push(q.k); S.loot[i]+=q.v;
+  S.claimed[i].push(q.k); S.points[i]+=q.v;
   save(); render();
-  toast('+'+q.v+' points · '+q.t+' · stash now '+S.loot[i]);
+  toast('+'+q.v+' points · '+q.t+' · stash now '+S.points[i]);
 }
 function joinCoparent(){ S.coparent.joined=true; save(); goTo('CP-03'); toast('Alex joined the family'); }
 function acceptCircle(){ S.sharmasIn=true; save(); goTo('INV-04'); }
@@ -3395,7 +3395,7 @@ function skipSetup(){
   S.wifi='Rivera_Home';
   S.devices[0].owner='Maya'; S.devices[1].owner='Maya'; S.devices[2].owner='Jake'; S.devices[3].owner='Family';
   S.kids.forEach(k=>{ k.paired=true; if(needsCoppa(k)) k.coppa=true; });
-  S.win=0; S.loot={0:73,1:73};
+  S.win=0; S.points={0:73,1:73};
   S.diet={0:'lesssocial',1:'balanced'};
   S.plan='free';
   S.flow='parent'; S.step='D0-02'; S.kidStep={0:'K-04',1:'K-04'};
