@@ -131,6 +131,7 @@ slightly stale or worth a second look.
 | Prototype · 878 | Notes panel: *"Claim a quest on **Maya's** phone and Sam's…"* — names a hard-coded child that no longer exists by default. |
 | Prototype · 904 | Notes panel: *"**points vs XP.** … The marketing site says XP throughout."* — the app now says points everywhere, so this note is out of date. |
 | Prototype · 1976–1983, 3206–3219, 3244–3268 | The abbreviation **`pts`** is still used on the child screens, while the rest of the app says **points**. Only the word XP/Loot was swapped; `pts` was left as a copy decision. |
+| Website · 207 | Hero card and the "What you can't see" panel both say **"Maya, 11"**. The prototype now says 14. Left alone — it is copy. |
 | Prototype · 3805 | STAGE note for `P-08` names *Sam* and *Maya* in prose. |
 | Prototype · 3822 | STAGE note for `K-02` names *Maya*. |
 | Prototype · 3823 | STAGE note for `K-DISC`. |
@@ -165,7 +166,10 @@ to be `[COPY]` too, they are all in one place: search for `pal-row` and
   implementation in an IIFE near the end of the file that nothing mounts — the
   mount map at line 3859 only knows `HR`, `MIX` and `RDR`. The `74` score that
   was removed lived in there. It is dead code; deleting it is a separate call.
-- **`scoreOnline` / `scoreOff` / `scoreOverall` are defined but never called.**
+- **`scoreOverall()` is defined and never called.** It lives at line 1900 and
+  averages `scoreOnline()` (1887) and `scoreOff()` (1894), which nothing else
+  calls either. It is the function a human would expect to have produced the
+  `74` that was removed. It did not — that `74` was typed in by hand.
 - **The demo clock is fixed.** `const TODAY = new Date(2026,7,24)`.
 
 ---
