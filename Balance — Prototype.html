@@ -2977,6 +2977,44 @@ const SCREENS = {
   ${zoneSheet()}`};
 },
 
+/* ─────── 1d · HOUSE RULES · GATE 2 — thresholds we watch for ─────── */
+/* Rebuilt from the THRESH data and the .exp inline-expander CSS, both of
+   which were already in the file. Every string comes from THRESH. Hero and
+   CTA words are [COPY]. */
+'HR-02':()=>{
+  const i=S.goalKid, c=S.kids[i];
+  const row=t=>{
+    const v=thget(i,t.k), rec=thIsRec(i,t.k), open=S.thOpen===t.k;
+    const lo=v<=t.min, hi=v>=t.max;
+    return `<button class="grow" onclick="openTh('${t.k}')">
+      <span class="gi">${ico(t.e)}</span>
+      <span class="gb"><span class="gt">${t.t}${rec?' <span class="pf-tag">Recommended</span>':''}</span>
+        <span class="gs">${t.s}</span></span>
+      <span class="gv"><b>${t.fmt(v)}</b></span><span class="chev">›</span></button>
+    ${open?`<div class="exp">
+      <div class="exp-r">
+        <button class="rnd ${lo?'off':''}" onclick="stepTh('${t.k}',-1)">−</button>
+        <div class="exp-v">${t.fmt(v)}${t.unit?`<small>${t.unit}</small>`:''}</div>
+        <button class="rnd ${hi?'off':''}" onclick="stepTh('${t.k}',1)">+</button>
+      </div>
+      <div class="exp-n">${t.n}</div>
+      ${rec?'':`<div class="exp-reset" onclick="resetTh('${t.k}')">Use the recommendation for ${c.age}</div>`}
+    </div>`:''}`;
+  };
+  return { wm:1, html:`
+  <div class="lg">
+    <div class="lg-k">[COPY] · ${esc(c.name)}, ${c.age}</div>
+    <div class="lg-t">[COPY]</div>
+    <div class="lg-s">[COPY]</div>
+  </div>
+
+  <div class="seclbl">[COPY]</div>
+  <div class="grp">${THRESH.map(row).join('')}</div>
+
+  <div class="cta-stack"><button class="cta" onclick="finishHR()">[COPY]</button></div>
+  ${hrAllRec(i)?'':`<button class="cta-2" onclick="resetHR()">Use the recommendation for ${c.age}</button>`}`};
+},
+
 /* ─────── SETTLED SCREENS · house rules · the mix · redirect ─────── */
 'HR':()=>({ wm:0, flush:1, html:`<div id="s-rules" class="mod-wrap"><div id="rules-body"></div></div>` }),
 'MIX':()=>({ wm:0, flush:1, html:`<div id="s-mix" class="mod-wrap"><div id="mix-body"></div></div>` }),
