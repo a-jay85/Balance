@@ -2671,6 +2671,13 @@ const SCREENS = {
     <div style="flex:1"><div class="win-t" style="${t.done?'color:#6e6e73':''}">${t.t}</div><div class="win-s">${t.s}</div></div>
     <span style="width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:12px;font-weight:700;${t.done?'background:#22c55e;color:#fff':'color:#1d1d1f'}">${t.done?'✓':'›'}</span></button>`}).join('')})()}
 
+  <!-- FIRST REPORT CARD - tells the parent their first report lands at 2am.
+       Slot only. A human writes the label, the line and the timestamp. -->
+  <div class="info-card" style="margin:14px 18px 0">
+    <div class="info-label">[COPY]</div>
+    <div class="info-b">[COPY]</div>
+  </div>
+
   <div class="goalhero">
     <div class="goalring">${ring0()}<div class="goalv"><b>0%</b><small>to goal</small></div></div>
     <div><div class="goaltl">${esc(c.name)}'s day starts now.</div>
