@@ -1531,7 +1531,7 @@ const BLANK = {
     {icon:'💻', name:'School Chromebook',os:'ChromeOS 131',owner:null}
   ],
   win:null, questPlan:false,
-  goalKid:0, diet:{}, zones:{}, thresh:{}, hrDone:{}, zoneEdit:null, thOpen:null,
+  goalKid:0, diet:{}, zones:{}, thresh:{}, hrDone:{}, hrSet:{}, zoneEdit:null, thOpen:null,
   plan:'free', subscribed:false, upsell:null,
   homeKid:0, homeRange:'daily',
   points:{0:50, 1:50},          // per child — day 0 starts at 50
@@ -1598,6 +1598,7 @@ function hydrate(saved){
   s.assigning = null; s.person = null; s.editing = null; s.zoneEdit = null;
   if(typeof s.thOpen!=='string') s.thOpen = null;
   if(!s.hrDone || typeof s.hrDone!=='object') s.hrDone = {};
+  if(!s.hrSet  || typeof s.hrSet !=='object') s.hrSet  = {};
   ['zones','thresh'].forEach(k=>{ Object.keys(s[k]||{}).forEach(n=>{ if(!s[k][n]||typeof s[k][n]!=='object') delete s[k][n]; }); });   // no sheet open on boot
 
   s.__v = SCHEMA;
@@ -3853,9 +3854,11 @@ function resetHR(){
 }
 function finishHR(){
   const i=S.goalKid;
-  if(!S.hrDone) S.hrDone={};
-  S.hrDone[i]=true; save();
-  const more=S.kids.findIndex((k,n)=>!S.hrDone[n]);
+  /* Own flag: S.hrDone is also written by profileNext(), so reusing it here
+     made this chain skip straight to D0-00 on the first child. */
+  if(!S.hrSet || typeof S.hrSet!=='object') S.hrSet={};
+  S.hrSet[i]=true; save();
+  const more=S.kids.findIndex((k,n)=>!S.hrSet[n]);
   if(more>=0){ S.goalKid=more; save(); toast(S.kids[i].name+"'s rules saved"); goTo('HR-01'); return; }
   toast('House rules set for the family');
   goTo('D0-00');
