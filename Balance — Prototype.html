@@ -1876,6 +1876,24 @@ function flagsFor(i){
   out.push('C'); return out;
 }
 
+/* Today's win rows. These were four hard-coded blocks of markup inside D0-02.
+   Lifted verbatim into data so the list can be capped and so each row can open
+   a detail screen that reads the same text. No wording was changed. */
+function winRows(i){
+  const c=S.kids[i]; if(!c) return [];
+  const wk=S.homeRange==='weekly', claims=(S.claimed[i]||[]).length;
+  const out=[
+    {ico:'\u26BD', t:'Soccer practice, then a walk after dinner', s:'Saved 40 min. <b>+15 pts earned.</b>'},
+    {ico:'\uD83D\uDD2C', t:'Thirty minutes of a science channel and Duolingo', s:'<b>+10 pts earned.</b>'},
+    {ico:'\uD83C\uDF7D\uFE0F', t:'Dinner with the family, no phones', s:'Everyone earned points.'},
+    {ico:'\uD83C\uDF19', t:'Phone in the kitchen by nine. Nine hours of sleep.', s:'Reported by '+esc(c.name)+'. <b>+5 pts.</b>'}
+  ];
+  if(claims) out.push({ico:'\u2728',
+    t:claims+' quest'+(claims===1?'':'s')+' claimed '+(wk?'this week':'today'),
+    s:'Now <b>'+S.points[i]+' pts</b> in '+tpl('{their}',c)+' stash.'});
+  return out;
+}
+
 /* what a teen is told — computed from the same rules the parent saw */
 function whatParentSees(c){
   const yes=['How long you spend in each app, each day'];
@@ -2725,17 +2743,13 @@ const SCREENS = {
     <span class="attn-section-h" style="margin:0">Wins ${wk?'this week':'today'}</span>
     <button class="seeall" onclick="toast('Full history after the first week')">All wins ›</button>
   </div>
-  <div class="win-row"><span class="win-ico">⚽</span><div><div class="win-t">Soccer practice, then a walk after dinner</div><div class="win-s">Saved 40 min. <b>+15 pts earned.</b></div></div></div>
-  <div class="win-row"><span class="win-ico">🔬</span><div><div class="win-t">Thirty minutes of a science channel and Duolingo</div><div class="win-s"><b>+10 pts earned.</b></div></div></div>
-  <div class="win-row"><span class="win-ico">🍽️</span><div><div class="win-t">Dinner with the family, no phones</div><div class="win-s">Everyone earned points.</div></div></div>
-  <div class="win-row"><span class="win-ico">🌙</span><div><div class="win-t">Phone in the kitchen by nine. Nine hours of sleep.</div><div class="win-s">Reported by ${esc(c.name)}. <b>+5 pts.</b></div></div></div>
-  ${claims?`<div class="win-row"><span class="win-ico">✨</span><div><div class="win-t">${claims} quest${claims===1?'':'s'} claimed ${wk?'this week':'today'}</div><div class="win-s">Now <b>${S.points[i]} pts</b> in ${tpl('{their}',c)} stash.</div></div></div>`:''}
+  ${winRows(i).slice(0,3).map(w=>`<div class="win-row"><span class="win-ico">${w.ico}</span><div><div class="win-t">${w.t}</div><div class="win-s">${w.s}</div></div></div>`).join('')}
 
   <div class="attn-head mt20">
     <span class="attn-section-h" style="margin:0">Needs attention</span>
     <button class="seeall" onclick="goTo('FLAG')">See all ›</button>
   </div>
-  ${flags.map((f,n)=>`<button class="attn-item tap" onclick="openFlag(${i},'${n===0?'A':n===1?'B':'C'}')">
+  ${flags.slice(0,3).map((f,n)=>`<button class="attn-item tap" onclick="openFlag(${i},'${n===0?'A':n===1?'B':'C'}')">
       <span class="risk-badge ${f.sev==='Low'?'low':'medium'}">${f.sev}</span>
       <div class="attn-body"><div class="attn-text">${f.t}</div><div class="attn-meta">${f.s}</div></div>
       <span class="attn-chev">›</span></button>`).join('')}
