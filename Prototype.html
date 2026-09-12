@@ -1628,6 +1628,10 @@ const BLANK = {
     {icon:'📺', name:'Living Room TV',os:'tvOS',      owner:null},
     {icon:'💻', name:'School Chromebook',os:'ChromeOS 131',owner:null}
   ],
+  /* demoFamily: the family on screen is the fixture, not typed.
+     custom: the parent has typed a name or picked a date of birth on P-04,
+     which retires the demo family for the rest of the session. */
+  demoFamily:false, custom:false, typedKids:null,
   win:null, questPlan:false,
   goalKid:0, diet:{}, zones:{}, thresh:{}, hrDone:{}, hrSet:{}, zoneEdit:null, thOpen:null,
   plan:'free', subscribed:false, upsell:null,
@@ -1730,7 +1734,18 @@ function turns13(d){
   return dobLabel((+p[0]+13)+'-'+p[1]+'-'+p[2])+' · '+(days>60?Math.round(days/30)+' months':days+' days')+' away';
 }
 
-let S = hydrate(load());
+/* Data defaults to the demo family, so every screen has a real family in it
+   without anyone typing. BLANK.kids stays blank on purpose: it is hydrate()'s
+   recovery fallback and the family a parent gets the moment they type on P-04. */
+function seedDemo(s){
+  s.kids = JSON.parse(JSON.stringify(DEMO_FAMILY));
+  s.demoFamily = true;
+  s.added = Math.max(s.added, s.kids.length);
+  return hydrate(s);
+}
+const saved = load();
+let S = hydrate(saved);
+if(!saved && !S.custom) S = seedDemo(S);
 
 /* ═══════════════ QUESTS — exact from the handoff ═══════════════ */
 const QUESTS = [
