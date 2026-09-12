@@ -137,6 +137,10 @@ async function renderFrames(browser) {
     t += b.dur;
   }
   jobs.push({ name: 'end', caption: cueAt(t), end: true });
+  // phone-shaped mask: the clip is cut to this so nothing shows outside the rounded bezel
+  const r = Math.round(44 * 2 * PH_W / PW) + 2;                // .phone border-radius, scaled, +2px to bite into the bezel
+  await page.setContent(`<body style="margin:0;background:#000"><div style="width:${PH_W}px;height:${PH_H}px;border-radius:${r}px;background:#fff"></div></body>`);
+  await page.screenshot({ path: path.join(FRAMES, 'mask.png'), clip: { x: 0, y: 0, width: PH_W, height: PH_H } });
   for (const j of jobs) {
     await page.setContent(frameHtml(j));
     await page.evaluate(() => document.fonts.ready);
@@ -156,6 +160,11 @@ function ff(args) { execFileSync('ffmpeg', ['-v', 'error', '-y', ...args], { std
 function compose() {
   const leads = JSON.parse(fs.readFileSync(path.join(CLIPS, 'leads.json'), 'utf8'));
   const cut = id => `trim=start=${(leads[id] + 0.05).toFixed(2)},setpts=PTS-STARTPTS`;
+  const mask = path.join(FRAMES, 'mask.png');
+  // every caption change fades through the cream background; the first beat and the end card keep the global black fades
+  const XF = 0.3;
+  const xfade = (dur, start, fadeOut) => (start > 0 ? `,fade=t=in:st=0:d=${XF}:color=0x${CREAM.slice(1)}` : '') +
+                                        (fadeOut ? `,fade=t=out:st=${(dur - XF).toFixed(2)}:d=${XF}:color=0x${CREAM.slice(1)}` : '');
   const segs = [];
   let t = 0;
   for (const b of BEATS) {
@@ -164,19 +173,20 @@ function compose() {
     if (b.id === 'split-parent') {
       const w = SPLIT.w, h = SPLIT.h;
       ff(['-loop', '1', '-i', path.join(FRAMES, 'split.png'),
-          '-i', path.join(CLIPS, 'split-parent.webm'), '-i', path.join(CLIPS, 'split-child.webm'),
-          '-filter_complex', `[1:v]${cut('split-parent')},scale=${w}:${h}[a];[2:v]${cut('split-child')},scale=${w}:${h}[b];[0:v][a]overlay=${SPLIT.x1}:${SPLIT.y}[t];[t][b]overlay=${SPLIT.x2}:${SPLIT.y}`,
+          '-i', path.join(CLIPS, 'split-parent.webm'), '-i', path.join(CLIPS, 'split-child.webm'), '-i', mask,
+          '-filter_complex', `[3:v]format=gray,split[m1][m2];[1:v]${cut('split-parent')},scale=${w}:${h}[a0];[a0][m1]alphamerge[a];[2:v]${cut('split-child')},scale=${w}:${h}[b0];[b0][m2]alphamerge[b];[0:v][a]overlay=${SPLIT.x1}:${SPLIT.y}[t];[t][b]overlay=${SPLIT.x2}:${SPLIT.y}${xfade(b.dur, t, true)}`,
           '-t', String(b.dur), '-r', String(FPS), '-pix_fmt', 'yuv420p', '-an', out]);
     } else {
       const h = SINGLE.h, w = SINGLE.w;
-      ff(['-loop', '1', '-i', path.join(FRAMES, b.id + '.png'), '-i', path.join(CLIPS, b.id + '.webm'),
-          '-filter_complex', `[1:v]${cut(b.id)},scale=${w}:${h}[p];[0:v][p]overlay=${SINGLE.x}:${SINGLE.y}`,
+      ff(['-loop', '1', '-i', path.join(FRAMES, b.id + '.png'), '-i', path.join(CLIPS, b.id + '.webm'), '-i', mask,
+          '-filter_complex', `[2:v]format=gray[m];[1:v]${cut(b.id)},scale=${w}:${h}[p0];[p0][m]alphamerge[p];[0:v][p]overlay=${SINGLE.x}:${SINGLE.y}${xfade(b.dur, t, true)}`,
           '-t', String(b.dur), '-r', String(FPS), '-pix_fmt', 'yuv420p', '-an', out]);
     }
     segs.push(out); t += b.dur;
   }
   const end = path.join(OUT, 'seg-end.mp4');
-  ff(['-loop', '1', '-i', path.join(FRAMES, 'end.png'), '-t', String(END_DUR), '-r', String(FPS), '-pix_fmt', 'yuv420p', end]);
+  ff(['-loop', '1', '-i', path.join(FRAMES, 'end.png'), '-vf', xfade(END_DUR, t, false).slice(1) || 'null',
+      '-t', String(END_DUR), '-r', String(FPS), '-pix_fmt', 'yuv420p', end]);
   segs.push(end); t += END_DUR;
 
   const list = path.join(OUT, 'segs.txt');
