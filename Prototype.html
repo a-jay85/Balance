@@ -1595,7 +1595,7 @@ input[type=date].field-input{-webkit-appearance:none;appearance:none}
 const KEY='levelup.v3';
 let mem=null;
 function save(){ const j=JSON.stringify(S); try{localStorage.setItem(KEY,j)}catch(e){mem=j} }
-function load(){ /* fresh onboarding on every page load */ wipe(); return null; let r=null; try{r=localStorage.getItem(KEY)}catch(e){r=mem} if(!r)r=mem; if(!r)return null;
+function load(){ let r=null; try{r=localStorage.getItem(KEY)}catch(e){r=mem} if(!r)r=mem; if(!r)return null;
   try{return JSON.parse(r)}catch(e){return null} }
 function wipe(){ try{localStorage.removeItem(KEY)}catch(e){} mem=null }
 
@@ -1743,6 +1743,9 @@ function seedDemo(s){
   s.added = Math.max(s.added, s.kids.length);
   return hydrate(s);
 }
+/* Non-null when an earlier visit left state behind. A refresh mid-flow lands
+   back where it was instead of restarting onboarding; the rail's
+   "Reset — start over" is what clears it. */
 const saved = load();
 let S = hydrate(saved);
 if(!saved && !S.custom) S = seedDemo(S);
@@ -3948,21 +3951,28 @@ function tickClock(){
   const d=new Date(); let h=d.getHours()%12; if(h===0)h=12;
   document.getElementById('clock').textContent=h+':'+String(d.getMinutes()).padStart(2,'0');
 }
+/* A restored step has to name a screen this build still has, or the first
+   render draws an empty phone. SCREENS is declared far below hydrate(), so
+   the guard cannot live in there. */
+if(!SCREENS[S.step]){ S.flow='parent'; S.step='P-01'; save(); }
+
 tickClock(); setInterval(tickClock,10000);
 render();
 
 /* ═════ HASH DEEP LINK ═════
    The website links straight into a screen, e.g.
      Prototype.html#P-03
-   Runs after the first render() on purpose: load() wipes storage and seeds a
-   fresh S on every page load, so a jump made before that would be thrown away.
+   Only honoured on a cold boot. Once the flow has been walked the saved step
+   wins, or a refresh would snap back to whichever screen the website linked
+   to however far in you had got. Clicking a link while the page is already
+   open still jumps, through the hashchange listener below.
    An unknown or missing hash is ignored and the app opens normally. */
 function openFromHash(){
   const key=decodeURIComponent((location.hash||'').replace(/^#/,'')).trim();
   if(!key || !SCREENS[key]) return;
   railJump({s:key});
 }
-openFromHash();
+if(!saved) openFromHash();
 window.addEventListener('hashchange', openFromHash);
 
 /* ═══════════════ HOUSE RULES · behaviour ═══════════════ */
