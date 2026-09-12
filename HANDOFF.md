@@ -159,17 +159,22 @@ to be `[COPY]` too, they are all in one place: search for `pal-row` and
   The first name typed or date of birth picked on "Who's in your family" calls
   `goCustom()`: the child being edited becomes the empty slot the parent is
   filling, the other demo child drops back to a blank "New child" slot, the
-  checkbox unchecks itself, and `S.custom` is set. `S.custom` is saved, so a
-  refresh does not bring the demo family back — only **Reset — start over**
-  does. A half-typed name counts; nothing waits for a complete child.
+  checkbox unchecks itself, and `S.customFamily` is set. `S.customFamily` is
+  saved, so a refresh does not bring the demo family back. The three deliberate
+  ways back are in the next-but-one bullet. A half-typed name counts; nothing
+  waits for a complete child. Any device already tagged to a demo child loses
+  that owner at the same moment.
+  The flag is `customFamily`, not `custom` — `S.custom` is the per-child
+  custom-goals map used by `customOf()`, and a boolean there would break it.
 - **`BLANK.kids` is still the two blank slots.** That is deliberate. `BLANK` is
   `hydrate()`'s recovery fallback as well as its defaults, so it has to stay
   the source of an empty family. The demo is seeded on top at init by
   `seedDemo()`, which is also why `const DEMO_FAMILY` sits above `BLANK` — a
   `const` read before its declaration throws.
-- **Three ways to get the demo family.** It is the default at boot; the
-  **Developer · demo family** toggle reloads it; and **Skip ahead — family set
-  up** reloads it. All three use the same fixture. Turning the toggle off
+- **Three ways to get the demo family back.** **Reset — start over** rebuilds
+  the cold-boot state; the **Developer · demo family** toggle reloads it; and
+  **Skip ahead — family set up** reloads it. All three work even after
+  `S.customFamily` is set. All three use the same fixture. Turning the toggle off
   restores a typed family if there is one, and falls back to blank slots if
   nothing was ever typed.
 - **Maya is 14.** Her date of birth is `2012-03-14`. She is out of COPPA range,
