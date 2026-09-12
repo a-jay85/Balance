@@ -3537,14 +3537,37 @@ function removePerson(i){
   S.person=null; save(); render();
 }
 function closePerson(){ S.person=null; save(); render(); }
+/* The first name typed or date of birth picked on P-04 retires the demo
+   family: the child being edited becomes the empty slot the parent is
+   filling, and every other demo child goes back to a blank slot. Returns
+   true only on the call that made the switch, so the caller can redraw. */
+function goCustom(){
+  S.custom = true;
+  if(!S.demoFamily) return false;
+  const i = S.person;
+  S.kids = S.kids.map((k,n)=>JSON.parse(JSON.stringify(BLANK.kids[n % BLANK.kids.length])));
+  S.demoFamily = false; S.typedKids = null;
+  S = hydrate(S);                         // per-child maps reset with the family
+  S.person = i; S.homeKid = 0; S.goalKid = 0; S.kid = 0;
+  return true;
+}
 function personName(){
   const e=document.getElementById('pName'); if(!e) return;
+  if(!S.kids[S.person] || !e.value.trim()) return;
+  const switched = goCustom();
   const c=S.kids[S.person]; if(!c) return;
-  if(e.value.trim()){ c.name=e.value.trim(); c.letter=c.name.charAt(0).toUpperCase(); save(); }
+  c.name=e.value.trim(); c.letter=c.name.charAt(0).toUpperCase(); save();
+  if(switched){                           // the sheet still shows demo values
+    render();
+    const n=document.getElementById('pName');
+    if(n){ n.focus(); n.setSelectionRange(n.value.length, n.value.length); }
+  }
 }
 function setAge(a){
-  const c=S.kids[S.person]; if(!c) return;
+  if(!S.kids[S.person]) return;
+  goCustom();
   personName();
+  const c=S.kids[S.person]; if(!c) return;
   c.age=a; save(); render();
 }
 function personSheet(i){
@@ -3581,8 +3604,10 @@ function personSheet(i){
 }
 
 function setDob(v){
-  const c=S.kids[S.person]; if(!c) return;
+  if(!S.kids[S.person]) return;
+  goCustom();
   personName();
+  const c=S.kids[S.person]; if(!c) return;
   c.dob=v||null;
   const a=ageFromDob(v);
   c.age = (a===null?null:a);
