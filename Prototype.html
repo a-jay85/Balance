@@ -1629,9 +1629,9 @@ const BLANK = {
     {icon:'💻', name:'School Chromebook',os:'ChromeOS 131',owner:null}
   ],
   /* demoFamily: the family on screen is the fixture, not typed.
-     custom: the parent has typed a name or picked a date of birth on P-04,
+     customFamily: the parent has typed a name or picked a date of birth on P-04,
      which retires the demo family for the rest of the session. */
-  demoFamily:false, custom:false, typedKids:null,
+  demoFamily:false, customFamily:false, typedKids:null,
   win:null, questPlan:false,
   goalKid:0, diet:{}, zones:{}, thresh:{}, hrDone:{}, hrSet:{}, zoneEdit:null, thOpen:null,
   plan:'free', subscribed:false, upsell:null,
@@ -1749,7 +1749,7 @@ function seedDemo(s){
 /* The state a cold boot produces. hardReset() goes through here too — writing
    a bare BLANK instead would leave storage non-empty, and the next load would
    then skip the demo seed and show two "New child" slots. */
-function freshState(){ const s = hydrate(null); return s.custom ? s : seedDemo(s); }
+function freshState(){ const s = hydrate(null); return s.customFamily ? s : seedDemo(s); }
 const saved = load();
 let S = saved ? hydrate(saved) : freshState();
 
@@ -3549,7 +3549,7 @@ function closePerson(){ S.person=null; save(); render(); }
    filling, and every other demo child goes back to a blank slot. Returns
    true only on the call that made the switch, so the caller can redraw. */
 function goCustom(){
-  S.custom = true;
+  S.customFamily = true;
   if(!S.demoFamily) return false;
   const i = S.person;
   S.kids = S.kids.map((k,n)=>JSON.parse(JSON.stringify(BLANK.kids[n % BLANK.kids.length])));
