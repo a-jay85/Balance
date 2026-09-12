@@ -151,15 +151,27 @@ to be `[COPY]` too, they are all in one place: search for `pal-row` and
 
 ## 5 · Known behaviour that is not a bug
 
-- **A fresh page load has an empty family.** Family data now reads from what the
-  parent types on "Who's in your family" (`P-04`). The seed family is two blank
-  slots named "New child" with no age. If you rail-jump straight into a later
-  screen without typing anything, you will see `New child · null`. That is the
-  blank state showing through, not a crash — nothing throws and no screen is
-  empty. Use one of the two shortcuts below to get a working family.
-- **Two ways to load a demo family.** The **Developer · demo family** toggle in
-  the rail footer, and **Skip ahead — family set up**. Both load the same
-  fixture: Maya (14) and Jake (8). The toggle is off by default.
+- **A fresh page load starts on the demo family.** Maya (14) and Jake (8) are
+  loaded at boot, the **Developer · demo family** box in the rail footer is
+  checked, and `S.demoFamily` is `true`. Rail-jumping straight to any later
+  screen shows a full family with no typing.
+- **Typing on `P-04` retires the demo family, permanently for that session.**
+  The first name typed or date of birth picked on "Who's in your family" calls
+  `goCustom()`: the child being edited becomes the empty slot the parent is
+  filling, the other demo child drops back to a blank "New child" slot, the
+  checkbox unchecks itself, and `S.custom` is set. `S.custom` is saved, so a
+  refresh does not bring the demo family back — only **Reset — start over**
+  does. A half-typed name counts; nothing waits for a complete child.
+- **`BLANK.kids` is still the two blank slots.** That is deliberate. `BLANK` is
+  `hydrate()`'s recovery fallback as well as its defaults, so it has to stay
+  the source of an empty family. The demo is seeded on top at init by
+  `seedDemo()`, which is also why `const DEMO_FAMILY` sits above `BLANK` — a
+  `const` read before its declaration throws.
+- **Three ways to get the demo family.** It is the default at boot; the
+  **Developer · demo family** toggle reloads it; and **Skip ahead — family set
+  up** reloads it. All three use the same fixture. Turning the toggle off
+  restores a typed family if there is one, and falls back to blank slots if
+  nothing was ever typed.
 - **Maya is 14.** Her date of birth is `2012-03-14`. She is out of COPPA range,
   which changes which screens she sees.
 - **The `home` module is unreachable.** There is a whole second home-screen
