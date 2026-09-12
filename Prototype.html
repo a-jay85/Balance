@@ -2729,8 +2729,8 @@ const SCREENS = {
     {k:'Connections',v:'0',l:'Goal '+g.conn}];
   const paired=c.paired||(S.devices||[]).some(d=>d.owner===c.name);
   const todo=[
-    {done:true, col:p.col, ico:p.ico, t:'Goals set for '+esc(c.name), s:p.t+'. Change any time from Settings.'},
-    {done:paired, col:'#3b82f6', ico:'M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2ZM11 18h2', t:paired?esc(c.name)+"'s phone is paired":'Pair '+esc(c.name)+"'s phone", s:paired?'Tracking starts now.':'Two minutes. Scan a code on the phone.', go:'P-08'},
+    {done:true, col:p.col, ico:p.ico, t:'Goals set for '+esc(c.name), s:p.t+'. Adjust in Settings.'},
+    {done:paired, col:'#3b82f6', ico:'M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2ZM11 18h2', t:paired?esc(c.name)+"'s phone is paired":'Pair '+esc(c.name)+"'s phone", s:paired?'Tracking starts now.':'Have them scan your QR code.', go:'P-08'},
     {done:!!(S.kidStep&&S.kidStep[i]==='K-04'), col:'#ff5a36', ico:'M12 3l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6L7.1 18.2l.9-5.5-4-3.9L9.5 8Z', t:(S.kidStep&&S.kidStep[i]==='K-04')?esc(c.name)+' is in the kids app':'Invite '+esc(c.name)+' to the kids app', s:'Same goals. '+tpl('{They}',c)+' earn'+(tpl('{they}',c)==='they'?'':'s')+' the points.', go:'KID'+i},
     {done:!!(S.cal&&S.cal[i]&&S.cal[i].mode), col:'#f5b400', ico:'M4 5h16v15H4zM4 10h16M8 3v4M16 3v4', t:(S.cal&&S.cal[i]&&S.cal[i].mode)?esc(c.name)+"'s week is in":'Add '+esc(c.name)+"'s week", s:(S.cal&&S.cal[i]&&S.cal[i].mode)?(S.cal[i].mode==='manual'?S.cal[i].items.length+(S.cal[i].items.length===1?' activity':' activities')+' added.':'Calendar synced. Read only.'):'Sync a calendar or add by hand.', go:'CAL-01'},];
   return { nav:'Home', html:`
