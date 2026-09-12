@@ -40,7 +40,7 @@ html,body{margin:0;background:${CREAM};overflow:hidden}
 .stage{display:block!important;padding:0!important;margin:0!important}
 .phone-wrap{position:fixed!important;left:0;top:0;margin:0!important;padding:0!important;zoom:2;width:360px}
 .phone{box-shadow:none!important;width:360px!important;height:740px!important}   /* pin: the <900px media query would otherwise shrink-to-fit */
-.toast{zoom:2;bottom:56px;font-size:13px;padding:11px 18px}`;
+.toast,.note{display:none!important}   /* no dev/prototype notes or toasts in the video */`;
 
 const sleep = (page, ms) => page.waitForTimeout(ms);
 const run   = (page, js) => page.evaluate(js);
@@ -60,10 +60,10 @@ const BEATS = [
       await setup(p, `S.hrDone={}; S.goalKid=0; S.diet={}; save(); goTo('PR-01')`); await sleep(p, 1300);
       await run(p, `goTo('G-01')`); await sleep(p, 900);
       await run(p, `pickDiet(DIETS[1].k)`); await sleep(p, 1100);
-      await run(p, `toast('Goals set for the family'); goTo('D0-02')`); await sleep(p, 1400); } },
+      await run(p, `goTo('D0-02')`); await sleep(p, 1400); } },
   { id: 'split-parent', dur: 5, async act(p) {
       await setup(p, `goTo('D0-02')`); await sleep(p, 2200);
-      await run(p, `S.claimed[0]=S.claimed[0]||[]; S.claimed[0].push(QUESTS[1].k); S.points[0]+=QUESTS[1].v; save(); render(); toast('Maya claimed a quest · +'+QUESTS[1].v+' points')`);
+      await run(p, `S.claimed[0]=S.claimed[0]||[]; S.claimed[0].push(QUESTS[1].k); S.points[0]+=QUESTS[1].v; save(); render()`);
       await sleep(p, 3000); } },
   { id: 'split-child', dur: 5, async act(p) {
       await setup(p, `S.kid=0; S.flow='child'; S.seenDisclosure[0]=true; save(); goTo('K-04')`); await sleep(p, 2200);
