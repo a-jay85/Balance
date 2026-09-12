@@ -50,33 +50,31 @@ const scroll= (page, top) => run(page, `document.getElementById('body').scrollTo
 
 /* ── beats. dur in seconds. Each records one clip (split records two). ── */
 const BEATS = [
-  { id: 'meet', dur: 3, async act(p) {
-      await run(p, `goTo('P-01')`); await sleep(p, 2650);
-      await run(p, `goTo('P-03')`); await sleep(p, 500); } },
-  { id: 'signup', dur: 4, async act(p) {
-      await setup(p, `S.signedInWith=null; save(); goTo('P-03')`); await sleep(p, 900);
-      await run(p, `signIn('Apple')`); await sleep(p, 1200);
-      await run(p, `goTo('P-06b')`); await sleep(p, 1200);
-      await run(p, `goTo('P-10')`); await sleep(p, 1000); } },
-  { id: 'goals', dur: 4, async act(p) {
+  { id: 'signup', dur: 5, async act(p) {
+      await setup(p, `S.signedInWith=null; save(); goTo('P-01')`); await sleep(p, 1300);
+      await run(p, `goTo('P-03')`); await sleep(p, 900);
+      await run(p, `signIn('Apple')`); await sleep(p, 1100);
+      await run(p, `goTo('P-06b')`); await sleep(p, 1000);
+      await run(p, `goTo('P-10')`); await sleep(p, 1200); } },
+  { id: 'goals', dur: 4.5, async act(p) {
       await setup(p, `S.hrDone={}; S.goalKid=0; S.diet={}; save(); goTo('PR-01')`); await sleep(p, 1300);
       await run(p, `goTo('G-01')`); await sleep(p, 900);
       await run(p, `pickDiet(DIETS[1].k)`); await sleep(p, 1100);
-      await run(p, `toast('Goals set for the family'); goTo('D0-02')`); await sleep(p, 900); } },
-  { id: 'split-parent', dur: 4, async act(p) {
-      await setup(p, `goTo('D0-02')`); await sleep(p, 1700);
+      await run(p, `toast('Goals set for the family'); goTo('D0-02')`); await sleep(p, 1400); } },
+  { id: 'split-parent', dur: 5, async act(p) {
+      await setup(p, `goTo('D0-02')`); await sleep(p, 2200);
       await run(p, `S.claimed[0]=S.claimed[0]||[]; S.claimed[0].push(QUESTS[1].k); S.points[0]+=QUESTS[1].v; save(); render(); toast('Maya claimed a quest · +'+QUESTS[1].v+' points')`);
-      await sleep(p, 2500); } },
-  { id: 'split-child', dur: 4, async act(p) {
-      await setup(p, `S.kid=0; S.flow='child'; S.seenDisclosure[0]=true; save(); goTo('K-04')`); await sleep(p, 1700);
-      await run(p, `claimQuest(1)`); await sleep(p, 2500); } },
+      await sleep(p, 3000); } },
+  { id: 'split-child', dur: 5, async act(p) {
+      await setup(p, `S.kid=0; S.flow='child'; S.seenDisclosure[0]=true; save(); goTo('K-04')`); await sleep(p, 2200);
+      await run(p, `claimQuest(1)`); await sleep(p, 3000); } },
   { id: 'watch', dur: 5, async act(p) {
       await setup(p, `goTo('FLAG')`); await sleep(p, 1400);
       await run(p, `openFlag(0,'A')`); await sleep(p, 1600);
       await scroll(p, 420); await sleep(p, 2200); } },
-  { id: 'talk', dur: 4, async act(p) {
-      await setup(p, `goTo('TALK',[0,'A'])`); await sleep(p, 1600);
-      await scroll(p, 380); await sleep(p, 2600); } },
+  { id: 'talk', dur: 4.5, async act(p) {
+      await setup(p, `goTo('TALK',[0,'A'])`); await sleep(p, 2000);
+      await scroll(p, 380); await sleep(p, 2700); } },
   { id: 'plan', dur: 4, async act(p) {
       await setup(p, `S.goalKid=0; S.cal={0:{mode:null,items:[],skip:false},1:{mode:null,items:[],skip:false}}; save(); goTo('CAL-01')`); await sleep(p, 800);
       await run(p, `syncCal('phone')`); await sleep(p, 1400);
@@ -119,7 +117,7 @@ function frameHtml({ caption, labels, end }) {
 html,body{margin:0;width:${W}px;height:${H}px;background:${CREAM};font-family:Manrope,-apple-system,sans-serif;color:${INK};overflow:hidden}
 .wm{position:absolute;left:140px;top:84px;font-size:34px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:12px}
 .wm i{width:16px;height:16px;border-radius:50%;background:${CORAL};display:block}
-.cap{position:absolute;left:140px;top:0;height:${H}px;display:flex;align-items:center;width:${end ? 1640 : split ? 700 : 920}px}
+.cap{position:absolute;left:140px;top:0;height:${H}px;display:flex;align-items:center;width:${end ? 1640 : split ? 700 : 1120}px}
 .cap div{font-size:${end ? 76 : 66}px;line-height:1.16;font-weight:800;letter-spacing:-.02em;white-space:pre-line}
 .lab{position:absolute;text-align:center;font-size:24px;font-weight:700;color:${MUTED}}
 </style></head><body>
