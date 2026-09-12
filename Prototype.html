@@ -1746,9 +1746,12 @@ function seedDemo(s){
 /* Non-null when an earlier visit left state behind. A refresh mid-flow lands
    back where it was instead of restarting onboarding; the rail's
    "Reset — start over" is what clears it. */
+/* The state a cold boot produces. hardReset() goes through here too — writing
+   a bare BLANK instead would leave storage non-empty, and the next load would
+   then skip the demo seed and show two "New child" slots. */
+function freshState(){ const s = hydrate(null); return s.custom ? s : seedDemo(s); }
 const saved = load();
-let S = hydrate(saved);
-if(!saved && !S.custom) S = seedDemo(S);
+let S = saved ? hydrate(saved) : freshState();
 
 /* ═══════════════ QUESTS — exact from the handoff ═══════════════ */
 const QUESTS = [
@@ -3726,7 +3729,7 @@ function skipSetup(){
   S.seenDisclosure={0:true};
   save(); render(); toast('Family set up — jumped to Day 1');
 }
-function hardReset(){ wipe(); S=JSON.parse(JSON.stringify(BLANK)); save(); render(); toast('Reset'); }
+function hardReset(){ wipe(); S=freshState(); save(); render(); toast('Reset'); }
 function openNotes(){ document.getElementById('notes').classList.add('on'); }
 function closeNotes(){ document.getElementById('notes').classList.remove('on'); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeNotes(); });
@@ -3972,7 +3975,11 @@ function openFromHash(){
   if(!key || !SCREENS[key]) return;
   railJump({s:key});
 }
-if(!saved) openFromHash();
+/* A reload and a fresh click on a website link are different intents. The
+   reload keeps the saved step; arriving from Website.html's "Get started"
+   honours its #P-03 even for someone who has been here before. */
+const reloaded = (performance.getEntriesByType('navigation')[0]||{}).type === 'reload';
+if(!saved || !reloaded) openFromHash();
 window.addEventListener('hashchange', openFromHash);
 
 /* ═══════════════ HOUSE RULES · behaviour ═══════════════ */
