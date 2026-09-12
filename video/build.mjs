@@ -38,8 +38,8 @@ const PHONE_CSS = `
 .rail,.stage-copy{display:none!important}
 html,body{margin:0;background:${CREAM};overflow:hidden}
 .stage{display:block!important;padding:0!important;margin:0!important}
-.phone-wrap{position:fixed!important;left:0;top:0;margin:0!important;padding:0!important;zoom:2}
-.phone{box-shadow:none!important}
+.phone-wrap{position:fixed!important;left:0;top:0;margin:0!important;padding:0!important;zoom:2;width:360px}
+.phone{box-shadow:none!important;width:360px!important;height:740px!important}   /* pin: the <900px media query would otherwise shrink-to-fit */
 .toast{zoom:2;bottom:56px;font-size:13px;padding:11px 18px}`;
 
 const sleep = (page, ms) => page.waitForTimeout(ms);
@@ -110,6 +110,7 @@ async function record(browser) {
 
 /* ── caption frames, rendered in the browser so Manrope matches the app ── */
 function frameHtml({ caption, labels, end }) {
+  const split = !!labels;
   const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const lab = labels ? labels.map(l => `<div class="lab" style="left:${l.x}px;top:${l.y}px;width:${l.w}px">${esc(l.t)}</div>`).join('') : '';
   return `<!doctype html><html><head><link rel="preconnect" href="https://fonts.googleapis.com">
@@ -118,7 +119,7 @@ function frameHtml({ caption, labels, end }) {
 html,body{margin:0;width:${W}px;height:${H}px;background:${CREAM};font-family:Manrope,-apple-system,sans-serif;color:${INK};overflow:hidden}
 .wm{position:absolute;left:140px;top:84px;font-size:34px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:12px}
 .wm i{width:16px;height:16px;border-radius:50%;background:${CORAL};display:block}
-.cap{position:absolute;left:140px;top:0;height:${H}px;display:flex;align-items:center;width:${end ? 1640 : 920}px}
+.cap{position:absolute;left:140px;top:0;height:${H}px;display:flex;align-items:center;width:${end ? 1640 : split ? 700 : 920}px}
 .cap div{font-size:${end ? 76 : 66}px;line-height:1.16;font-weight:800;letter-spacing:-.02em;white-space:pre-line}
 .lab{position:absolute;text-align:center;font-size:24px;font-weight:700;color:${MUTED}}
 </style></head><body>
@@ -148,9 +149,10 @@ async function renderFrames(browser) {
 }
 
 /* ── layout ── */
-const SINGLE = { h: 960, x: 1313, y: 60 };                     // one phone, right side
-const SPLIT  = { h: 820, w: 399, x1: 1060, x2: 1499, y: 150,
-  labels: [{ t: 'Sam', x: 1060, y: 96, w: 399 }, { t: 'Maya', x: 1499, y: 96, w: 399 }] };
+const PH_H = 960, PH_W = Math.round(PH_H * PW / PH);           // one phone size everywhere (467x960)
+const SINGLE = { h: PH_H, w: PH_W, x: 1313, y: 60 };            // one phone, right side
+const SPLIT  = { h: PH_H, w: PH_W, x1: 886, x2: 1393, y: 60,     // two phones, same size, 40px gap
+  labels: [{ t: 'Sam', x: 886, y: 18, w: PH_W }, { t: 'Maya', x: 1393, y: 18, w: PH_W }] };
 
 function ff(args) { execFileSync('ffmpeg', ['-v', 'error', '-y', ...args], { stdio: 'inherit' }); }
 function compose() {
@@ -168,7 +170,7 @@ function compose() {
           '-filter_complex', `[1:v]${cut('split-parent')},scale=${w}:${h}[a];[2:v]${cut('split-child')},scale=${w}:${h}[b];[0:v][a]overlay=${SPLIT.x1}:${SPLIT.y}[t];[t][b]overlay=${SPLIT.x2}:${SPLIT.y}`,
           '-t', String(b.dur), '-r', String(FPS), '-pix_fmt', 'yuv420p', '-an', out]);
     } else {
-      const h = SINGLE.h, w = Math.round(h * PW / PH);
+      const h = SINGLE.h, w = SINGLE.w;
       ff(['-loop', '1', '-i', path.join(FRAMES, b.id + '.png'), '-i', path.join(CLIPS, b.id + '.webm'),
           '-filter_complex', `[1:v]${cut(b.id)},scale=${w}:${h}[p];[0:v][p]overlay=${SINGLE.x}:${SINGLE.y}`,
           '-t', String(b.dur), '-r', String(FPS), '-pix_fmt', 'yuv420p', '-an', out]);
