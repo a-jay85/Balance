@@ -3555,6 +3555,9 @@ function goCustom(){
   S.kids = S.kids.map((k,n)=>JSON.parse(JSON.stringify(BLANK.kids[n % BLANK.kids.length])));
   S.demoFamily = false; S.typedKids = null;
   S = hydrate(S);                         // per-child maps reset with the family
+  /* Same sweep removePerson() does: a device tagged to a demo child must not
+     keep that name once the demo child is gone. */
+  S.devices.forEach(d=>{ if(!S.kids.some(k=>k.name===d.owner) && d.owner!=='Family' && d.owner!==S.parent.first) d.owner=null; });
   S.person = i; S.homeKid = 0; S.goalKid = 0; S.kid = 0;
   return true;
 }
