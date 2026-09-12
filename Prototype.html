@@ -1599,6 +1599,14 @@ function load(){ /* fresh onboarding on every page load */ wipe(); return null; 
   try{return JSON.parse(r)}catch(e){return null} }
 function wipe(){ try{localStorage.removeItem(KEY)}catch(e){} mem=null }
 
+/* The demo family. Loaded by default, by the developer toggle in the rail
+   footer, and by skip-ahead. Declared before BLANK because state init
+   reads it. A typed family is stashed on S.typedKids. */
+const DEMO_FAMILY = [
+  {name:'Maya', dob:'2012-03-14', age:14, av:'maya', letter:'M', devices:[], paired:false, oauth:true},
+  {name:'Jake', dob:'2018-06-02', age:8,  av:'leo',  letter:'J', devices:[], paired:false, coppa:false, oauth:true}
+];
+
 /* ═══════════════ SEED — the Rivera family, from the handoff ═══════════════ */
 const BLANK = {
   flow:'parent', step:'P-01', arg:null,
@@ -3473,13 +3481,6 @@ function runScan(){
 /* ═══════════════ PEOPLE — name, age, live COPPA ═══════════════ */
 const AVCOLORS=['maya','leo','sam','alex'];
 function openPerson(i){ S.person=i; save(); render(); }
-/* Developer toggle — loads the old hard-coded Maya/Jake fixture so a
-   bigger family can be demoed. Off by default; the typed family is
-   stashed on S.typedKids and restored when the toggle goes off. */
-const DEMO_FAMILY = [
-  {name:'Maya', dob:'2012-03-14', age:14, av:'maya', letter:'M', devices:[], paired:false, oauth:true},
-  {name:'Jake', dob:'2018-06-02', age:8,  av:'leo',  letter:'J', devices:[], paired:false, coppa:false, oauth:true}
-];
 function devFixture(on){
   const clone = x => JSON.parse(JSON.stringify(x));
   if(on){
