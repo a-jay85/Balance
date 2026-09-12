@@ -3502,8 +3502,9 @@ function devFixture(on){
     if(!S.demoFamily) S.typedKids = clone(S.kids);
     S.kids = clone(DEMO_FAMILY);
     S.added = Math.max(S.added, S.kids.length);
-  } else if(S.demoFamily && Array.isArray(S.typedKids)){
-    S.kids = S.typedKids;
+  } else if(S.demoFamily){
+    /* Nothing typed yet — demo is the default now — so fall back to blank slots. */
+    S.kids = Array.isArray(S.typedKids) ? S.typedKids : clone(BLANK.kids);
     S.typedKids = null;
   }
   S.demoFamily = !!on;
