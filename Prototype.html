@@ -171,6 +171,9 @@ body[data-palette="navy"] .phone-content{background:#0B1120}
 .gring{position:relative;width:54px;height:54px;margin:0 auto 6px}.gring svg{width:100%;height:100%}.gv{position:absolute;inset:0;display:grid;place-content:center;font-size:12px;font-weight:800;letter-spacing:-.02em}
 .gk{font-size:12px;font-weight:800}.gl{font-size:9.5px;color:var(--ink-m);line-height:1.3;margin-top:3px}
 .gl .gline{display:flex;align-items:center;gap:5px}.gl .gline+.gline{margin-top:2px}
+/* label and time as two tracks so the times start at one x, ragged-left labels butting up against them */
+.gl .gpairs{display:grid;grid-template-columns:auto auto;column-gap:9px;row-gap:2px;width:max-content}
+.gl .gpk{justify-self:end}.gl .gpv{justify-self:start}
 .gl .gemo{display:inline-flex;justify-content:center;width:13px;flex:0 0 13px;font-size:11px;line-height:1}
 /* same 13px box as .gemo so the times start at one x, whatever the mark's aspect */
 .app-ico{display:inline-flex;align-items:center;justify-content:center;width:13px;height:11px;flex:0 0 13px}.app-ico svg{max-width:100%;max-height:100%;display:block}
@@ -2070,6 +2073,7 @@ const APPICO = {
 function appIco(k){ return '<span class="app-ico">'+(APPICO[k]||'')+'</span>'; }
 /* one item per line — replaces the "·" separated run-on labels on the D0-02 cards */
 function glines(rows){ return rows.map(r=>'<span class="gline">'+r+'</span>').join(''); }
+function gpairs(rows){ return '<span class="gpairs">'+rows.map(r=>'<span class="gpk">'+r[0]+'</span><span class="gpv">'+r[1]+'</span>').join('')+'</span>'; }
 function gemo(e){ return '<span class="gemo">'+e+'</span>'; }
 
 const ZONES = [
@@ -2844,7 +2848,7 @@ const SCREENS = {
     {k:'Apps',ring:rSeg([[.32,'#e84c2b'],[.23,'#3b82f6'],[.18,'#34a862'],[.14,'#e0a21b'],[.09,'#8b5cf6']]),v:'<small>1h 45</small>',l:glines([appIco('yt')+'35m', appIco('rbx')+'25m', '3 more']),go:'FLAG'},
     {k:'Content',ring:rOne(73,'#F5B400'),v:'73',l:glines([gemo('\uD83E\uDDE0')+'45m', gemo('\uD83C\uDF89')+'40m', '3 flags']),go:'FLAG'},
     {k:'Off screen',ring:rOne(88,'#22C55E'),v:'88',l:glines([gemo('\u26BD')+'1h', gemo('\uD83D\uDC63')+'30m', gemo('\uD83D\uDCDA')+'45m']),go:'RECS'},
-    {k:"This Week's Connections",ring:rSeg([[.45,'#34a862'],[.36,'#3b82f6'],[.18,'#8b5cf6']]),v:'<small>5h 30</small>',l:glines(['Friends 2h 30m', 'Family 2h', 'Community 1h']),go:'RECS'}];
+    {k:"This Week's Connections",ring:rSeg([[.45,'#34a862'],[.36,'#3b82f6'],[.18,'#8b5cf6']]),v:'<small>5h 30</small>',l:gpairs([['Friends','2h 30m'], ['Family','2h'], ['Community','1h']]),go:'RECS'}];
   const ring=(v,col)=>{const C=2*Math.PI*26;const off=v==null?0:Math.round(C*(1-v/100));return `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="none" stroke="#e9e9ee" stroke-width="6"/><circle cx="30" cy="30" r="26" fill="none" stroke="${col||'#1d1d1f'}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off}" transform="rotate(-90 30 30)"/></svg>`;};
   /* Needs attention used to be its own hard-coded copy of the three flags, so
      it drifted from Flagged / Watch View / Talking Points and it showed flag B
