@@ -172,7 +172,7 @@ body[data-palette="navy"] .phone-content{background:#0B1120}
 .gk{font-size:12px;font-weight:800}.gl{font-size:9.5px;color:var(--ink-m);line-height:1.3;margin-top:3px}
 .gl .gline{display:flex;align-items:center;gap:5px}.gl .gline+.gline{margin-top:2px}
 .gl .gemo{font-size:11px;line-height:1}
-.app-ico{display:inline-flex;width:12px;height:12px;flex:0 0 12px}.app-ico svg{width:100%;height:100%;display:block}
+.app-ico{display:inline-flex;height:11px;flex:0 0 auto}.app-ico svg{height:100%;width:auto;display:block}
 .tpbox{margin:16px 18px 8px;border-top:1px solid var(--line);padding-top:12px}.tpk{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-m);font-weight:800;margin-bottom:4px}.tpt{font-size:13px;line-height:1.4}
 .risk-badge.low{background:var(--cream-deep);color:var(--ink-m)}
 .win-row{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.28)}
@@ -2058,9 +2058,13 @@ function ico(k){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentCol
 
 /* ═══ mini app tiles — the launcher icon, not a line glyph, so these carry
    their own fill and sit apart from ICON/ico() above ═══ */
+/* geometry lifted verbatim from each brand's own distribution, cropped to the
+   mark's bbox — no redrawing, no recolouring:
+   yt  gstatic.com/youtube/img/branding/youtubelogo/svg/youtubelogo.svg
+   rbx Roblox_Tilt_Black.svg, about.roblox.com/press-kit */
 const APPICO = {
-  yt:'<svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#FF0000"/><path d="M9.6 7.9v8.2L16.6 12Z" fill="#fff"/></svg>',
-  rbx:'<svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#232527"/><path d="M9.1 4.9 19.1 7.6l-2.7 10-10-2.7Z" fill="#fff"/><path d="M11.2 10.2l3.5.94-.94 3.5-3.5-.94Z" fill="#232527"/></svg>'
+  yt:'<svg viewBox="1.9 0.4 155.8 109.2"><path fill="#FF0000" d="M154.3,17.5c-1.8-6.7-7.1-12-13.8-13.8c-12.1-3.3-60.8-3.3-60.8-3.3S31,0.5,18.9,3.8c-6.7,1.8-12,7.1-13.8,13.8C1.9,29.7,1.9,55,1.9,55s0,25.3,3.3,37.5c1.8,6.7,7.1,12,13.8,13.8c12.1,3.3,60.8,3.3,60.8,3.3s48.7,0,60.8-3.3c6.7-1.8,12-7.1,13.8-13.8c3.3-12.1,3.3-37.5,3.3-37.5S157.6,29.7,154.3,17.5z"/><polygon fill="#FFFFFF" points="64.2,78.4 104.6,55 64.2,31.6"/></svg>',
+  rbx:'<svg viewBox="0 0 150 150"><path fill="#232527" d="M31.6984 0L0 118.302L118.302 150L150 31.6984L31.6984 0ZM87.1031 95.9652L54.0454 87.1031L62.9075 54.0454L95.9784 62.9075L87.1031 95.9652Z"/></svg>'
 };
 function appIco(k){ return '<span class="app-ico">'+(APPICO[k]||'')+'</span>'; }
 /* one item per line — replaces the "·" separated run-on labels on the D0-02 cards */
