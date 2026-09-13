@@ -1977,7 +1977,7 @@ const CASE_B={ id:'B', minAge:10, kind:'know', badge:'medium', chip:'Med · know
      ['What to avoid','Don’t comment on {their} body or eating in this conversation. Keep it about the app choosing for {them}. That is the part {they} can push back on.']]};
 
 const CASE_C={ id:'C', minAge:5, kind:'know', badge:'low', chip:'Low · worth knowing',
- line:'Two hauls.', sub:'Unboxings that are really ads. Nobody said so.',
+ line:'Two hauls.', sub:'Ads disguised as unboxings.',
  kind2:'Content · know about it', flagTxt:'Undisclosed ads',
  title:'Two haul videos', url:'youtube.com · two creators',
  channel:'Both sponsored. Neither says so on screen.', watch:'About 25 minutes total',
@@ -2006,8 +2006,8 @@ function winRows(i){
   const c=S.kids[i]; if(!c) return [];
   const wk=S.homeRange==='weekly', claims=(S.claimed[i]||[]).length;
   const out=[
-    {ico:'\u26BD', t:'Soccer practice, then a walk after dinner', s:'Saved 40 min. <b>+15 pts earned.</b>'},
-    {ico:'\uD83D\uDD2C', t:'Thirty minutes of a science channel and Duolingo', s:'<b>+10 pts earned.</b>'},
+    {ico:'\u26BD', t:'Soccer practice<br>Post-dinner walk', s:'Saved 40 min. <b>+15 pts earned.</b>'},
+    {ico:'\uD83D\uDD2C', t:'30 min of a science channel<br>Duolingo', s:'<b>+10 pts earned.</b>'},
     {ico:'\uD83C\uDF7D\uFE0F', t:'Dinner with the family, no phones', s:'Everyone earned points.'},
     {ico:'\uD83C\uDF19', t:'Phone in the kitchen by nine. Nine hours of sleep.', s:'Reported by '+esc(c.name)+'. <b>+5 pts.</b>'}
   ];
@@ -2840,7 +2840,7 @@ const SCREENS = {
   const rOne=(v,col)=>{const r=24,C=2*Math.PI*r;return `<svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="${r}" fill="none" stroke="#e9ebf3" stroke-width="6"/><circle cx="28" cy="28" r="${r}" fill="none" stroke="${col}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-v/100)}" transform="rotate(-90 28 28)"/></svg>`};
   const rSeg=(parts)=>{const r=24,C=2*Math.PI*r;let off=0;return `<svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="${r}" fill="none" stroke="#e9ebf3" stroke-width="6"/>`+parts.map(p=>{const len=C*p[0];const o=off;off+=len;return `<circle cx="28" cy="28" r="${r}" fill="none" stroke="${p[1]}" stroke-width="6" stroke-dasharray="${len-2} ${C-len+2}" stroke-dashoffset="${-o}" transform="rotate(-90 28 28)"/>`}).join('')+`</svg>`};
   const goals=[
-    {k:'Screen time',ring:rOne(78,'#22C55E'),v:'78',l:'1h 45m of 2h. Most of it after school.',go:'RECS'},
+    {k:'Screen time',ring:rOne(78,'#22C55E'),v:'78',l:'1h 45m of 2h. Mostly after school.',go:'RECS'},
     {k:'Apps',ring:rSeg([[.32,'#e84c2b'],[.23,'#3b82f6'],[.18,'#34a862'],[.14,'#e0a21b'],[.09,'#8b5cf6']]),v:'<small>1h 45</small>',l:glines([appIco('yt')+'35m', appIco('rbx')+'25m', '3 more']),go:'FLAG'},
     {k:'Content',ring:rOne(73,'#F5B400'),v:'73',l:glines([gemo('\uD83E\uDDE0')+'45m', gemo('\uD83C\uDF89')+'40m', '3 flags']),go:'FLAG'},
     {k:'Off screen',ring:rOne(88,'#22C55E'),v:'88',l:glines([gemo('\u26BD')+'1h', gemo('\uD83D\uDC63')+'30m', gemo('\uD83D\uDCDA')+'45m']),go:'RECS'},
@@ -2876,7 +2876,7 @@ const SCREENS = {
   <div class="goalhero">
     <div class="goalring">${ring(all,'var(--mint)')}<div class="goalv"><b>${all}%</b><small>to goal</small></div></div>
     <div><div class="goaltl">${esc(c.name)} picked a walk over Netflix.</div>
-      <div class="goalsub">Goals you set together. Habits the American Academy of Pediatrics calls healthy.</div></div>
+      <div class="goalsub">Goals you set together. Healthy habits endorsed by the American Academy of Pediatrics.</div></div>
   </div>
 
   <div class="goalgrid">
