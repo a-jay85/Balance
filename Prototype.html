@@ -24,14 +24,14 @@
 .lite .attn-item .risk-badge{color:#fff;font-size:10px;font-weight:800;padding:5px 9px}
 .lite .attn-item .risk-badge.medium{background:#FF5A36}.lite .attn-item .risk-badge.low{background:#F5B400}
 .lite .attn-chev{color:#1d1d1f}
-.lite .goalhero{background:#fff;border:1px solid #e6e8f2;border-radius:20px;padding:14px;margin:6px 18px 10px}
+.lite .goalhero{background:#fff;border:1px solid #e6e8f2;border-radius:20px;padding:14px;margin:6px 0 10px}
 .lite .goalv small{color:#15803D}
-.lite .goalgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:0 18px}
+.lite .goalgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:0}
 .lite .gc{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;background:#fff;border:1px solid #e6e8f2;border-radius:16px;padding:12px;text-align:left}
 .lite .gc:nth-child(1){background:linear-gradient(180deg,#fff,#eafaf0)}.lite .gc:nth-child(2){background:linear-gradient(180deg,#fff,#fff3e6)}.lite .gc:nth-child(3){background:linear-gradient(180deg,#fff,#fff8dc)}.lite .gc:nth-child(4){background:linear-gradient(180deg,#fff,#e8f1ff)}.lite .gc:nth-child(5){background:linear-gradient(180deg,#fff,#f1e9ff);grid-column:1/-1}
 .lite .gc .rg{position:relative;width:56px;height:56px}.lite .gc .rg svg{width:100%;height:100%}.lite .gc .rg div{position:absolute;inset:0;display:grid;place-content:center;font-size:14px;font-weight:800;letter-spacing:-.02em}.lite .gc .rg div small{font-size:9.5px;font-weight:800}
 .lite .gc>.gk{grid-column:1/-1;font-size:11.5px;font-weight:800;text-align:center}.lite .gc>.gl{font-size:9.5px;color:var(--ink-m);line-height:1.35;margin-top:0}
-.lite .tpbox{background:#111114;color:#fff;border-radius:16px;padding:12px 14px;border:0;margin:16px 18px 8px}
+.lite .tpbox{background:#111114;color:#fff;border-radius:16px;padding:12px 14px;border:0;margin:16px 0 8px}
 .lite .tpbox .tpk{color:#FFB9A8}.lite .tpbox .tpt{color:#fff}
 .lite .info-card,.lite .meta-tbl{background:#fff;border-color:#e6e8f2}
 .lite .note{background:#fff;border:1px solid #e6e8f2}
@@ -2006,8 +2006,8 @@ function winRows(i){
   const c=S.kids[i]; if(!c) return [];
   const wk=S.homeRange==='weekly', claims=(S.claimed[i]||[]).length;
   const out=[
-    {ico:'\u26BD', t:'Soccer practice<br>Post-dinner walk', s:'Saved 40 min. <b>+15 pts earned.</b>'},
-    {ico:'\uD83D\uDD2C', t:'30 min of a science channel<br>Duolingo', s:'<b>+10 pts earned.</b>'},
+    {ico:'\u26BD', t:'• Soccer practice<br>• Post-dinner walk', s:'Saved 40 min. <b>+15 pts earned.</b>'},
+    {ico:'\uD83D\uDD2C', t:'• 30 min of a science channel<br>• Duolingo', s:'<b>+10 pts earned.</b>'},
     {ico:'\uD83C\uDF7D\uFE0F', t:'Dinner with the family, no phones', s:'Everyone earned points.'},
     {ico:'\uD83C\uDF19', t:'Phone in the kitchen by nine. Nine hours of sleep.', s:'Reported by '+esc(c.name)+'. <b>+5 pts.</b>'}
   ];
