@@ -30,7 +30,7 @@
 .lite .gc{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;background:#fff;border:1px solid #e6e8f2;border-radius:16px;padding:12px;text-align:left}
 .lite .gc:nth-child(1){background:linear-gradient(180deg,#fff,#eafaf0)}.lite .gc:nth-child(2){background:linear-gradient(180deg,#fff,#fff3e6)}.lite .gc:nth-child(3){background:linear-gradient(180deg,#fff,#fff8dc)}.lite .gc:nth-child(4){background:linear-gradient(180deg,#fff,#e8f1ff)}.lite .gc:nth-child(5){background:linear-gradient(180deg,#fff,#f1e9ff);grid-column:1/-1}
 .lite .gc .rg{position:relative;width:56px;height:56px}.lite .gc .rg svg{width:100%;height:100%}.lite .gc .rg div{position:absolute;inset:0;display:grid;place-content:center;font-size:14px;font-weight:800;letter-spacing:-.02em}.lite .gc .rg div small{font-size:9.5px;font-weight:800}
-.lite .gc .gk{font-size:11.5px;font-weight:800}.lite .gc .gl{font-size:9.5px;color:var(--ink-m);line-height:1.35;margin-top:3px}
+.lite .gc>.gk{grid-column:1/-1;font-size:11.5px;font-weight:800}.lite .gc>.gl{font-size:9.5px;color:var(--ink-m);line-height:1.35;margin-top:0}
 .lite .tpbox{background:#111114;color:#fff;border-radius:16px;padding:12px 14px;border:0;margin:16px 18px 8px}
 .lite .tpbox .tpk{color:#FFB9A8}.lite .tpbox .tpt{color:#fff}
 .lite .info-card,.lite .meta-tbl{background:#fff;border-color:#e6e8f2}
@@ -2843,7 +2843,7 @@ const SCREENS = {
     {k:'Apps',ring:rSeg([[.32,'#e84c2b'],[.23,'#3b82f6'],[.18,'#34a862'],[.14,'#e0a21b'],[.09,'#8b5cf6']]),v:'<small>1h 45</small>',l:glines([appIco('yt')+'35m', appIco('rbx')+'25m', '3 more']),go:'FLAG'},
     {k:'Content',ring:rOne(73,'#F5B400'),v:'73',l:glines([gemo('\uD83E\uDDE0')+'45m', gemo('\uD83C\uDF89')+'40m', '3 flags']),go:'FLAG'},
     {k:'Off screen',ring:rOne(88,'#22C55E'),v:'88',l:glines([gemo('\u26BD')+'1h', gemo('\uD83D\uDC63')+'30m', gemo('\uD83D\uDCDA')+'45m']),go:'RECS'},
-    {k:'Connections',ring:rSeg([[.45,'#34a862'],[.36,'#3b82f6'],[.18,'#8b5cf6']]),v:'<small>5h 30</small>',l:glines(['Friends 2h 30m', 'Family 2h', 'Community 1h. This week.']),go:'RECS'}];
+    {k:"This Week's Connections",ring:rSeg([[.45,'#34a862'],[.36,'#3b82f6'],[.18,'#8b5cf6']]),v:'<small>5h 30</small>',l:glines(['Friends 2h 30m', 'Family 2h', 'Community 1h']),go:'RECS'}];
   const ring=(v,col)=>{const C=2*Math.PI*26;const off=v==null?0:Math.round(C*(1-v/100));return `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="none" stroke="#e9e9ee" stroke-width="6"/><circle cx="30" cy="30" r="26" fill="none" stroke="${col||'#1d1d1f'}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off}" transform="rotate(-90 30 30)"/></svg>`;};
   /* Needs attention used to be its own hard-coded copy of the three flags, so
      it drifted from Flagged / Watch View / Talking Points and it showed flag B
@@ -2880,8 +2880,9 @@ const SCREENS = {
 
   <div class="goalgrid">
     ${goals.map(g=>`<button class="gc tap" onclick="goTo('${g.go}')">
+      <div class="gk">${g.k}</div>
       <div class="rg">${g.ring}<div>${g.v}</div></div>
-      <div><div class="gk">${g.k}</div><div class="gl">${g.l}</div></div></button>`).join('')}
+      <div class="gl">${g.l}</div></button>`).join('')}
   </div>
 
   <div class="attn-head">
